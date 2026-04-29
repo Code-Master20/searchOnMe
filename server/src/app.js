@@ -12,12 +12,26 @@ const messageRoutes = require("./routes/messageRoutes");
 const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
 
 const app = express();
-const allowedOrigin = process.env.CLIENT_URL || "http://localhost:3000";
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URLS,
+  "https://searchonme.vercel.app",
+  "http://localhost:3000"
+]
+  .flatMap((origin) => (origin || "").split(","))
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(helmet());
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Origin is not allowed by CORS."));
+    },
     credentials: true
   })
 );
