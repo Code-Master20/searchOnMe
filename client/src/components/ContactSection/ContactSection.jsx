@@ -38,11 +38,11 @@ function ContactSection() {
         body: JSON.stringify(form)
       });
 
-      setForm(initialForm);
       setStatus({
         type: "success",
         text:
-          data.message || "Verification email sent. Please confirm it to complete your message."
+          data.message ||
+          "Verification email accepted. Please check your inbox or spam folder for the link."
       });
     } catch (error) {
       setStatus({

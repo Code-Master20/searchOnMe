@@ -20,12 +20,23 @@ const getVerificationLink = (token) => {
   return `${baseUrl}/api/messages/verify/${token}`;
 };
 
+const sendEmail = async (emailOptions) => {
+  const { data, error } = await resend.emails.send(emailOptions);
+
+  if (error) {
+    const message = error.message || "Email provider rejected the request.";
+    throw new Error(message);
+  }
+
+  return data;
+};
+
 const sendVerificationEmail = async (email, token, name) => {
   const verificationLink = getVerificationLink(token);
   const safeName = escapeHtml(name);
   const safeLink = escapeHtml(verificationLink);
 
-  await resend.emails.send({
+  return sendEmail({
     from: fromAddress,
     to: email,
     subject: "Verify your searchOnMe message",
@@ -55,7 +66,7 @@ const sendAdminNotification = async (message) => {
     throw new Error("No admin notification email is configured.");
   }
 
-  await resend.emails.send({
+  return sendEmail({
     from: fromAddress,
     to: adminEmails,
     subject: "New verified message on searchOnMe",
@@ -75,7 +86,7 @@ const sendReplyEmail = async (email, reply, name) => {
   const safeName = escapeHtml(name);
   const safeReply = escapeHtml(reply);
 
-  await resend.emails.send({
+  return sendEmail({
     from: fromAddress,
     to: email,
     subject: "Reply from searchOnMe",
