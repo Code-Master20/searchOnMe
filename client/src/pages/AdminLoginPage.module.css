@@ -1,0 +1,79 @@
+.section {
+  padding: 48px 0;
+}
+
+.panel {
+  max-width: 720px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.kicker {
+  margin: 0 0 16px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+}
+
+.panel h1 {
+  margin: 0 0 16px;
+  max-width: 12ch;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(2.6rem, 5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.panel p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.form label {
+  display: grid;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.form input {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid rgba(8, 20, 33, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  outline: none;
+}
+
+.form button {
+  min-height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), #eefcb1);
+  color: #07111f;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.status {
+  min-height: 24px;
+  margin: 16px 0 0;
+  font-weight: 600;
+}

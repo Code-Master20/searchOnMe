@@ -1,0 +1,272 @@
+.section {
+  padding: 48px 0;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.heading,
+.listPanel,
+.detailPanel,
+.emptyState {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.heading {
+  margin-bottom: 18px;
+}
+
+.kicker {
+  margin: 0 0 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.heading h1 {
+  margin: 0 0 16px;
+  max-width: 14ch;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(2.6rem, 5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.heading p,
+.status,
+.helperText,
+.messageEmail,
+.messageDate,
+.messagePreview,
+.detailMeta,
+.emptyState {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.secondaryLink,
+.secondaryButton,
+.loginLink,
+.messageButton,
+.replyForm button {
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.secondaryLink,
+.secondaryButton,
+.loginLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 18px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+}
+
+.secondaryButton:disabled,
+.replyForm button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.status {
+  min-height: 24px;
+  margin: 14px 0;
+  font-weight: 600;
+}
+
+.loginLink {
+  margin-bottom: 18px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.panelHeader,
+.messageMeta,
+.messageHeader,
+.badgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panelHeader {
+  margin-bottom: 16px;
+}
+
+.panelHeader h2,
+.messageHeader h2 {
+  margin: 0;
+}
+
+.messageList {
+  display: grid;
+  gap: 12px;
+}
+
+.messageButton {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 18px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.messageButtonActive {
+  border-color: rgba(157, 197, 0, 0.45);
+  box-shadow: 0 16px 32px rgba(157, 197, 0, 0.12);
+}
+
+.messageName {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.messageEmail,
+.messageDate,
+.messagePreview,
+.badge,
+.badgeMuted {
+  margin: 0;
+}
+
+.messageEmail,
+.messageDate {
+  font-size: 0.9rem;
+}
+
+.messagePreview {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.detailPanel {
+  display: grid;
+  gap: 18px;
+}
+
+.detailMeta {
+  display: grid;
+  gap: 6px;
+}
+
+.detailMeta p {
+  margin: 0;
+}
+
+.messageBody {
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(8, 20, 33, 0.08);
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+
+.replyForm {
+  display: grid;
+  gap: 14px;
+}
+
+.replyForm label {
+  display: grid;
+  gap: 10px;
+}
+
+.replyForm span {
+  color: var(--muted);
+}
+
+.replyForm textarea {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid rgba(8, 20, 33, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+}
+
+.replyForm button {
+  min-height: 50px;
+  padding: 0 18px;
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), #eefcb1);
+  color: #07111f;
+  cursor: pointer;
+}
+
+.helperText {
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+.badge,
+.badgeMuted {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+}
+
+.badge {
+  background: rgba(216, 255, 87, 0.46);
+  color: #4e6300;
+}
+
+.badgeMuted {
+  background: rgba(8, 20, 33, 0.08);
+  color: var(--muted);
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .heading,
+  .listPanel,
+  .detailPanel,
+  .emptyState {
+    padding: 22px;
+  }
+
+  .messageMeta,
+  .messageHeader,
+  .badgeRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

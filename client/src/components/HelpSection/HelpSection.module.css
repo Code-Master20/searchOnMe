@@ -1,0 +1,92 @@
+.section {
+  padding: 36px 0;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 22px;
+  color: var(--muted);
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+}
+
+.heading h2 {
+  margin: 0;
+  max-width: 13ch;
+  color: var(--text);
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(2.4rem, 4.6vw, 4.4rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.card {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.card span {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(8, 20, 33, 0.06);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.card h3 {
+  margin: 0 0 12px;
+  font-size: 1.25rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+@media (max-width: 1024px) {
+  .heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .heading h2 {
+    max-width: 15ch;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .card {
+    padding: 22px;
+  }
+
+  .heading h2 {
+    font-size: clamp(2rem, 10vw, 3.2rem);
+  }
+}

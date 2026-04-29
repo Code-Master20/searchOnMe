@@ -1,0 +1,148 @@
+.section {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 18px;
+  align-items: start;
+  padding: 36px 0;
+}
+
+.copy {
+  padding: 14px 8px 0 0;
+}
+
+.kicker {
+  margin: 0 0 16px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+}
+
+.copy h2 {
+  margin: 0;
+  max-width: 12ch;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(2.4rem, 4.6vw, 4.4rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.copy p {
+  max-width: 54ch;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.contactPoints {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.contactPoints a {
+  font-weight: 700;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.form label {
+  display: grid;
+  gap: 10px;
+}
+
+.form span {
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid rgba(8, 20, 33, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.form input:focus,
+.form textarea:focus {
+  border-color: #3457f1;
+  box-shadow: 0 0 0 4px rgba(52, 87, 241, 0.1);
+}
+
+.submitButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), #eefcb1);
+  color: #07111f;
+  box-shadow: 0 12px 32px rgba(157, 197, 0, 0.22);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.submitButton:hover,
+.submitButton:focus-visible {
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
+.note,
+.status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.status {
+  min-height: 24px;
+  font-weight: 500;
+}
+
+.success {
+  color: #356d00;
+}
+
+.error {
+  color: #b42318;
+}
+
+@media (max-width: 1024px) {
+  .section {
+    grid-template-columns: 1fr;
+  }
+
+  .copy h2 {
+    max-width: 15ch;
+  }
+}
+
+@media (max-width: 720px) {
+  .copy h2 {
+    font-size: clamp(2rem, 10vw, 3.2rem);
+  }
+
+  .form {
+    padding: 22px;
+  }
+}
