@@ -130,6 +130,13 @@ const createMessage = async (req, res, next) => {
       await sendVerificationEmail(savedMessage.email, verificationToken, savedMessage.name);
     } catch (emailError) {
       await Message.findByIdAndDelete(savedMessage._id);
+      console.error("Verification email failed", {
+        to: savedMessage.email,
+        provider: emailError.provider,
+        providerStatusCode: emailError.providerStatusCode,
+        providerName: emailError.providerName,
+        providerMessage: emailError.message
+      });
       emailError.statusCode = 502;
       emailError.message =
         "Unable to send the verification email right now. Please check the email address or try again later.";

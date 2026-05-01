@@ -61,7 +61,7 @@ Create `.env` based on `.env.example`.
 - `ADMIN_PASSWORD`
 - `COOKIE_SAME_SITE`
 - `RESEND_API_KEY`
-- `EMAIL_FROM` or `EMAIL_USER`
+- `EMAIL_FROM` or `EMAIL_USER` - use a sender on your verified Resend domain, for example `searchOnMe <hello@budgetfree.shop>`
 - `CLOUDINARY_CLOUD_NAME`
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`

@@ -1,6 +1,7 @@
 const { Resend } = require("resend");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
 const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER;
 const adminEmails = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "")
   .split(",")
@@ -20,12 +21,28 @@ const getVerificationLink = (token) => {
   return `${baseUrl}/api/messages/verify/${token}`;
 };
 
+const assertEmailConfig = () => {
+  if (!resend) {
+    throw new Error("RESEND_API_KEY is not configured.");
+  }
+
+  if (!fromAddress) {
+    throw new Error("EMAIL_FROM is not configured.");
+  }
+};
+
 const sendEmail = async (emailOptions) => {
+  assertEmailConfig();
+
   const { data, error } = await resend.emails.send(emailOptions);
 
   if (error) {
     const message = error.message || "Email provider rejected the request.";
-    throw new Error(message);
+    const sendError = new Error(message);
+    sendError.provider = "resend";
+    sendError.providerStatusCode = error.statusCode;
+    sendError.providerName = error.name;
+    throw sendError;
   }
 
   return data;
