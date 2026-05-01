@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { requestJson } from "../../utils/api";
 import styles from "./ContactSection.module.css";
 
@@ -124,6 +125,7 @@ function ContactSection() {
             <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" rel="noreferrer">
               Open Gmail
             </a>
+            <Link to={`/responses?email=${encodeURIComponent(form.email)}`}>Check response</Link>
             <a href="#contact">Back to searchOnMe</a>
           </div>
         )}

@@ -4,7 +4,8 @@ export const navLinks = [
   { href: "/projects", label: "Projects" },
   { href: "/this-project", label: "This Project" },
   { href: "/help", label: "Help" },
-  { href: "/contact", label: "Contact" }
+  { href: "/contact", label: "Contact" },
+  { href: "/responses", label: "Responses" }
 ];
 
 export const metrics = [
@@ -127,6 +128,7 @@ export const thisProjectFeatureGroups = [
 export const thisProjectApiRoutes = [
   "GET /api/health",
   "POST /api/messages",
+  "POST /api/messages/responses",
   "GET /api/messages/verify/:token",
   "POST /api/admin/login",
   "POST /api/admin/logout",

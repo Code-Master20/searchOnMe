@@ -151,6 +151,31 @@ const createMessage = async (req, res, next) => {
   }
 };
 
+const getMessageResponses = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: "Validation failed", errors: errors.array() });
+    }
+
+    const email = req.body.email.toLowerCase();
+    const messages = await Message.find({ email, isVerified: true })
+      .select("_id status createdAt updatedAt")
+      .sort({ createdAt: -1 });
+
+    const responses = messages.map((message) => ({
+      id: message._id,
+      status: message.status === "replied" ? "replied" : "pending",
+      submittedAt: message.createdAt,
+      repliedAt: message.status === "replied" ? message.updatedAt : null
+    }));
+
+    return res.status(200).json({ data: responses });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const verifyMessage = async (req, res, next) => {
   try {
     const { token } = req.params;
@@ -229,6 +254,7 @@ const replyToMessage = async (req, res, next) => {
 
 module.exports = {
   createMessage,
+  getMessageResponses,
   verifyMessage,
   replyToMessage
 };

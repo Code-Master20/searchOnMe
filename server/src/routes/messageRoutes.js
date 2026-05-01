@@ -1,6 +1,10 @@
 const express = require("express");
 const { body } = require("express-validator");
-const { createMessage, verifyMessage } = require("../controllers/messageController");
+const {
+  createMessage,
+  getMessageResponses,
+  verifyMessage
+} = require("../controllers/messageController");
 
 const router = express.Router();
 
@@ -20,5 +24,11 @@ router.post(
 );
 
 router.get("/verify/:token", verifyMessage);
+
+router.post(
+  "/responses",
+  [body("email").trim().isEmail().withMessage("Valid email is required.")],
+  getMessageResponses
+);
 
 module.exports = router;

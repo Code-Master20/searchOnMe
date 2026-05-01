@@ -10,6 +10,7 @@ import HelpPage from "./pages/HelpPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProjectsPage from "./pages/ProjectsPage";
+import ResponsesPage from "./pages/ResponsesPage";
 import ThisProjectPage from "./pages/ThisProjectPage";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/this-project" element={<ThisProjectPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/responses" element={<ResponsesPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin/messages" element={<AdminMessagesPage />} />
         <Route path="/admin/assets" element={<AdminAssetsPage />} />
