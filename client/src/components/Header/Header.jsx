@@ -1,11 +1,16 @@
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { navLinks } from "../../data/siteContent";
 import styles from "./Header.module.css";
 
 function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
     <header className={styles.topbar}>
-      <Link className={styles.brand} to="/">
+      <Link className={styles.brand} to="/" onClick={closeMenu}>
         <span className={styles.brandMark}>S</span>
         <span className={styles.brandCopy}>
           <strong>searchOnMe</strong>
@@ -13,12 +18,25 @@ function Header() {
         </span>
       </Link>
 
-      <nav className={styles.nav}>
+      <button
+        type="button"
+        className={styles.menuButton}
+        aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isMenuOpen}
+        onClick={() => setIsMenuOpen((current) => !current)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`.trim()}>
         {navLinks.map((link) => (
           <NavLink
             className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`.trim()}
             to={link.href}
             key={link.href}
+            onClick={closeMenu}
           >
             {link.label}
           </NavLink>

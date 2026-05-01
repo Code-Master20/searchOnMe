@@ -52,6 +52,10 @@
   flex-wrap: wrap;
 }
 
+.menuButton {
+  display: none;
+}
+
 .navLink {
   position: relative;
   font-size: 0.92rem;
@@ -82,12 +86,77 @@
 
 @media (max-width: 720px) {
   .topbar {
-    position: static;
+    position: sticky;
     border-radius: 28px;
     padding: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brandCopy strong,
+  .brandCopy small {
+    overflow-wrap: anywhere;
+  }
+
+  .menuButton {
+    display: inline-grid;
+    place-items: center;
+    gap: 4px;
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+    border: 1px solid rgba(8, 20, 33, 0.1);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.64);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .menuButton span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
   }
 
   .nav {
-    gap: 12px;
+    display: none;
+    flex: 1 0 100%;
+    gap: 10px;
+    padding-top: 6px;
+  }
+
+  .navOpen {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .navLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(8, 20, 33, 0.08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.48);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  .navLink::after {
+    display: none;
+  }
+
+  .active {
+    border-color: transparent;
+    background: #07111f;
+    color: #ffffff;
   }
 }
