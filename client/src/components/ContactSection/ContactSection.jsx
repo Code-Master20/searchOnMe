@@ -119,6 +119,14 @@ function ContactSection() {
         >
           {status.text}
         </p>
+        {status.type === "success" && (
+          <div className={styles.verificationActions}>
+            <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" rel="noreferrer">
+              Open Gmail
+            </a>
+            <a href="#contact">Back to searchOnMe</a>
+          </div>
+        )}
       </form>
     </section>
   );

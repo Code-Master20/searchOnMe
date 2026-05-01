@@ -127,6 +127,41 @@
   color: #b42318;
 }
 
+.verificationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.verificationActions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.verificationActions a:first-child {
+  border-color: transparent;
+  background: #ffffff;
+  color: #1f1f1f;
+  box-shadow: 0 10px 24px rgba(8, 20, 33, 0.08);
+}
+
+.verificationActions a:hover,
+.verificationActions a:focus-visible {
+  border-color: rgba(52, 87, 241, 0.32);
+  transform: translateY(-1px);
+}
+
 @media (max-width: 1024px) {
   .section {
     grid-template-columns: 1fr;
