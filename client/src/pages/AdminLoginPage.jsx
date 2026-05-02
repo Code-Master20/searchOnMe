@@ -20,6 +20,11 @@ function AdminLoginPage() {
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [showPasswords, setShowPasswords] = useState({
+    login: false,
+    newPassword: false,
+    confirmPassword: false
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -208,6 +213,13 @@ function AdminLoginPage() {
     }
   };
 
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords((current) => ({
+      ...current,
+      [field]: !current[field]
+    }));
+  };
+
   return (
     <section className={styles.section}>
       <div className={styles.panel}>
@@ -253,15 +265,25 @@ function AdminLoginPage() {
             {loginStep === "credentials" ? (
               <label>
                 <span>Password</span>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Your admin password"
-                  value={loginForm.password}
-                  onChange={handleChange}
-                  disabled={isCheckingSession}
-                  required
-                />
+                <div className={styles.passwordField}>
+                  <input
+                    type={showPasswords.login ? "text" : "password"}
+                    name="password"
+                    placeholder="Your admin password"
+                    value={loginForm.password}
+                    onChange={handleChange}
+                    disabled={isCheckingSession}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className={styles.visibilityButton}
+                    onClick={() => togglePasswordVisibility("login")}
+                    disabled={isCheckingSession}
+                  >
+                    {showPasswords.login ? "Hide" : "View"}
+                  </button>
+                </div>
               </label>
             ) : (
               <label>
@@ -345,27 +367,47 @@ function AdminLoginPage() {
             </label>
             <label>
               <span>New password</span>
-              <input
-                type="password"
-                name="newPassword"
-                placeholder="At least 8 characters"
-                value={passwordResetForm.newPassword}
-                onChange={handleChange}
-                disabled={isCheckingSession}
-                required
-              />
+              <div className={styles.passwordField}>
+                <input
+                  type={showPasswords.newPassword ? "text" : "password"}
+                  name="newPassword"
+                  placeholder="At least 8 characters"
+                  value={passwordResetForm.newPassword}
+                  onChange={handleChange}
+                  disabled={isCheckingSession}
+                  required
+                />
+                <button
+                  type="button"
+                  className={styles.visibilityButton}
+                  onClick={() => togglePasswordVisibility("newPassword")}
+                  disabled={isCheckingSession}
+                >
+                  {showPasswords.newPassword ? "Hide" : "View"}
+                </button>
+              </div>
             </label>
             <label>
               <span>Confirm new password</span>
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Repeat the new password"
-                value={passwordResetForm.confirmPassword}
-                onChange={handleChange}
-                disabled={isCheckingSession}
-                required
-              />
+              <div className={styles.passwordField}>
+                <input
+                  type={showPasswords.confirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Repeat the new password"
+                  value={passwordResetForm.confirmPassword}
+                  onChange={handleChange}
+                  disabled={isCheckingSession}
+                  required
+                />
+                <button
+                  type="button"
+                  className={styles.visibilityButton}
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                  disabled={isCheckingSession}
+                >
+                  {showPasswords.confirmPassword ? "Hide" : "View"}
+                </button>
+              </div>
             </label>
             <button type="submit" disabled={isSubmitting || isCheckingSession}>
               {isCheckingSession

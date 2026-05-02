@@ -75,6 +75,13 @@
   color: var(--muted);
 }
 
+.passwordField {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
 .form input {
   width: 100%;
   padding: 15px 16px;
@@ -99,6 +106,17 @@
   border: 1px solid rgba(8, 20, 33, 0.12);
   background: rgba(255, 255, 255, 0.72);
   color: var(--text);
+}
+
+.visibilityButton {
+  min-width: 78px;
+  min-height: 50px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .form button:disabled {
