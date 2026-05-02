@@ -110,10 +110,6 @@ function AdminLoginPage() {
           })
         });
 
-        await requestJson("/api/admin/session", {
-          credentials: "include"
-        });
-
         notifyAdminSessionChanged(true);
         setStatus("Login successful. Opening admin panel...");
         navigate("/admin/panel", { replace: true });

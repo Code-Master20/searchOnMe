@@ -17,6 +17,7 @@ function useAdminSession() {
 
   useEffect(() => {
     const controller = new AbortController();
+    const shouldRetryStoredSession = () => readAdminSessionFlag();
 
     const checkAdminSession = async () => {
       setIsCheckingAdmin(true);
@@ -40,12 +41,7 @@ function useAdminSession() {
           error.message?.toLowerCase().includes("not authorized") ||
           error.message?.toLowerCase().includes("invalid or expired session");
 
-        if (isUnauthorizedError) {
-          if (!controller.signal.aborted) {
-            setIsAdmin(false);
-            persistAdminSessionFlag(false);
-          }
-        } else if (readAdminSessionFlag()) {
+        if (shouldRetryStoredSession()) {
           if (!controller.signal.aborted) {
             setIsAdmin(true);
           }
@@ -70,11 +66,17 @@ function useAdminSession() {
             if (
               retryError.name !== "AbortError" &&
               (retryError.message?.toLowerCase().includes("not authorized") ||
-                retryError.message?.toLowerCase().includes("invalid or expired session"))
+                retryError.message?.toLowerCase().includes("invalid or expired session") ||
+                isUnauthorizedError)
             ) {
               setIsAdmin(false);
               persistAdminSessionFlag(false);
             }
+          }
+        } else if (isUnauthorizedError) {
+          if (!controller.signal.aborted) {
+            setIsAdmin(false);
+            persistAdminSessionFlag(false);
           }
         } else if (!controller.signal.aborted) {
           setIsAdmin(false);
