@@ -14,6 +14,22 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 8
+    },
+    loginOtpHash: {
+      type: String,
+      default: ""
+    },
+    loginOtpExpiresAt: {
+      type: Date,
+      default: null
+    },
+    passwordResetOtpHash: {
+      type: String,
+      default: ""
+    },
+    passwordResetOtpExpiresAt: {
+      type: Date,
+      default: null
     }
   },
   {

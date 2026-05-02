@@ -16,25 +16,41 @@ export const metrics = [
 
 export const chips = ["MongoDB", "Express", "React", "Node.js", "JavaScript", "Resend"];
 
-export const aboutHighlights = [
-  {
-    title: "Current role",
-    body:
-      "I am currently a MERN stack developer focused on building reliable web applications with strong frontend experiences and dependable backend systems."
-  },
-  {
-    title: "Education",
-    body:
-      "I am currently pursuing a BCA degree from Amity University Online, where I am continuing to strengthen both technical depth and problem-solving discipline."
-  },
-  {
-    title: "What I am building",
-    body:
-      "searchOnMe is my portfolio base, while globMe is my ongoing product project. Together they represent both my current execution and my direction as a developer."
-  }
-];
+export const defaultAboutContent = {
+  headingTitle:
+    "MERN stack development, academic growth, and a personal portfolio you can keep evolving.",
+  profileEyebrow: "Sahidur Miah",
+  profileTitle: "MERN Stack Developer",
+  profileBody:
+    "I focus on building full-stack web products with React, Node.js, Express, and MongoDB. I care about clean code, useful interfaces, and backend systems that feel dependable in real use.",
+  educationEyebrow: "Current education",
+  educationTitle: "BCA at Amity University Online",
+  educationBody:
+    "I am currently doing BCA in Amity University Online while continuing to grow as a MERN stack developer through practical portfolio work and ongoing product building.",
+  highlights: [
+    {
+      title: "Current role",
+      body:
+        "I am currently a MERN stack developer focused on building reliable web applications with strong frontend experiences and dependable backend systems."
+    },
+    {
+      title: "Education",
+      body:
+        "I am currently pursuing a BCA degree from Amity University Online, where I am continuing to strengthen both technical depth and problem-solving discipline."
+    },
+    {
+      title: "What I am building",
+      body:
+        "searchOnMe is my portfolio base, while globMe is my ongoing product project. Together they represent both my current execution and my direction as a developer."
+    }
+  ],
+  assetEyebrow: "Admin-managed portfolio assets",
+  assetTitle: "Resume, education documents, and photos are managed privately by admin.",
+  assetBody:
+    "Public visitors can view approved portfolio assets, but only Sahidur Miah can upload them through the private Cloudinary asset manager."
+};
 
-export const projects = [
+export const defaultProjects = [
   {
     eyebrow: "Ongoing project",
     tag: "Social media-like platform",
@@ -99,6 +115,8 @@ export const thisProjectFeatureGroups = [
       "Component-specific CSS Modules for scoped styling",
       "Separate routes for Home, About, Projects, This Project, Help, and Contact",
       "Private admin asset pages for resume, academic documents, and photos",
+      "Admin-managed About section content editing",
+      "Admin-managed project publishing for the Projects navigation",
       "Responsive layout designed for future content expansion"
     ]
   },
@@ -108,7 +126,9 @@ export const thisProjectFeatureGroups = [
       "Express API with MongoDB and Mongoose models",
       "Verified contact flow using tokenized email confirmation",
       "Admin authentication with JWT stored in HTTP-only cookies",
+      "Protected admin route for updating the About section copy",
       "Protected admin routes for viewing messages and replying",
+      "Protected admin routes for creating, editing, and deleting projects",
       "Admin-only Cloudinary signed uploads for portfolio assets",
       "Resend email service for verification, admin alerts, and replies"
     ]
@@ -132,9 +152,17 @@ export const thisProjectApiRoutes = [
   "GET /api/messages/verify/:token",
   "POST /api/admin/login",
   "POST /api/admin/logout",
+  "GET /api/about-content",
+  "GET /api/admin/about-content",
+  "PUT /api/admin/about-content",
   "GET /api/admin/messages",
   "GET /api/admin/messages/:id",
   "POST /api/admin/reply/:id",
+  "GET /api/projects",
+  "GET /api/admin/projects",
+  "POST /api/admin/projects",
+  "PUT /api/admin/projects/:id",
+  "DELETE /api/admin/projects/:id",
   "GET /api/admin/assets",
   "POST /api/admin/assets/signature",
   "POST /api/admin/assets",

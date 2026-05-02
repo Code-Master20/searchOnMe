@@ -29,6 +29,12 @@
   letter-spacing: -0.03em;
 }
 
+.sectionStatus {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

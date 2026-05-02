@@ -36,6 +36,12 @@
   line-height: 1.8;
 }
 
+.status {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr;
@@ -49,6 +55,22 @@
   background: var(--surface);
   backdrop-filter: blur(18px);
   box-shadow: var(--shadow);
+}
+
+.projectImage {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  object-fit: cover;
+  background: rgba(8, 20, 33, 0.08);
+}
+
+.projectGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
 .featured {
@@ -85,6 +107,15 @@
 .card ul {
   margin: 18px 0 0;
   padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.emptyState {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
   color: var(--muted);
   line-height: 1.8;
 }

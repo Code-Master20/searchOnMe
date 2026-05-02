@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { aboutHighlights } from "../../data/siteContent";
+import { defaultAboutContent } from "../../data/siteContent";
 import { requestJson } from "../../utils/api";
 import styles from "./AboutSection.module.css";
 
@@ -12,10 +12,22 @@ const categoryLabels = {
 
 function AboutSection() {
   const [assets, setAssets] = useState([]);
+  const [content, setContent] = useState(defaultAboutContent);
   const [assetStatus, setAssetStatus] = useState("");
+  const [contentStatus, setContentStatus] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
+
+    requestJson("/api/about-content", { signal: controller.signal })
+      .then((data) => {
+        setContent(data.data || defaultAboutContent);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setContentStatus("Showing saved About content while live updates reconnect.");
+        }
+      });
 
     requestJson("/api/assets", { signal: controller.signal })
       .then((data) => {
@@ -46,32 +58,27 @@ function AboutSection() {
     <section className={styles.section} id="about">
       <div className={styles.heading}>
         <p className={styles.kicker}>About</p>
-        <h2>MERN stack development, academic growth, and a personal portfolio you can keep evolving.</h2>
+        <h2>{content.headingTitle}</h2>
       </div>
+
+      {contentStatus ? <p className={styles.sectionStatus}>{contentStatus}</p> : null}
 
       <div className={styles.introPanel}>
         <div className={styles.profileCard}>
-          <p className={styles.profileEyebrow}>Sahidur Miah</p>
-          <h3>MERN Stack Developer</h3>
-          <p>
-            I focus on building full-stack web products with React, Node.js, Express, and MongoDB.
-            I care about clean code, useful interfaces, and backend systems that feel dependable in
-            real use.
-          </p>
+          <p className={styles.profileEyebrow}>{content.profileEyebrow}</p>
+          <h3>{content.profileTitle}</h3>
+          <p>{content.profileBody}</p>
         </div>
 
         <div className={styles.educationCard}>
-          <p className={styles.profileEyebrow}>Current education</p>
-          <h3>BCA at Amity University Online</h3>
-          <p>
-            I am currently doing BCA in Amity University Online while continuing to grow as a MERN
-            stack developer through practical portfolio work and ongoing product building.
-          </p>
+          <p className={styles.profileEyebrow}>{content.educationEyebrow}</p>
+          <h3>{content.educationTitle}</h3>
+          <p>{content.educationBody}</p>
         </div>
       </div>
 
       <div className={styles.grid}>
-        {aboutHighlights.map((card) => (
+        {content.highlights.map((card) => (
           <article className={styles.card} key={card.title}>
             <h3>{card.title}</h3>
             <p>{card.body}</p>
@@ -81,12 +88,9 @@ function AboutSection() {
 
       <div className={styles.assetSection}>
         <div className={styles.uploadHeader}>
-          <p className={styles.uploadKicker}>Admin-managed portfolio assets</p>
-          <h3>Resume, education documents, and photos are managed privately by admin.</h3>
-          <p>
-            Public visitors can view approved portfolio assets, but only Sahidur Miah can upload
-            them through the private Cloudinary asset manager.
-          </p>
+          <p className={styles.uploadKicker}>{content.assetEyebrow}</p>
+          <h3>{content.assetTitle}</h3>
+          <p>{content.assetBody}</p>
         </div>
 
         {assetStatus ? <p className={styles.assetStatus}>{assetStatus}</p> : null}

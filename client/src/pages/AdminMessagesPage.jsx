@@ -129,6 +129,12 @@ function AdminMessagesPage() {
   return (
     <section className={styles.section}>
       <div className={styles.actionRow}>
+        <Link className={styles.secondaryLink} to="/admin/about">
+          Open about editor
+        </Link>
+        <Link className={styles.secondaryLink} to="/admin/projects">
+          Open project manager
+        </Link>
         <Link className={styles.secondaryLink} to="/admin/assets">
           Open asset manager
         </Link>

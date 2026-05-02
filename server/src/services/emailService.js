@@ -1,12 +1,10 @@
 const { Resend } = require("resend");
+const { normalizedAdminEmails } = require("../config/adminEmails");
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER;
-const adminEmails = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "")
-  .split(",")
-  .map((email) => email.trim())
-  .filter(Boolean);
+const adminEmails = normalizedAdminEmails;
 
 const escapeHtml = (value = "") =>
   String(value)
@@ -117,7 +115,32 @@ const sendReplyEmail = async (email, reply, name) => {
   });
 };
 
+const sendAdminOtpEmail = async (email, otpCode, purpose) => {
+  const safeCode = escapeHtml(otpCode);
+  const isPasswordReset = purpose === "password-reset";
+  const title = isPasswordReset ? "Admin password reset verification" : "Admin login verification";
+  const intro = isPasswordReset
+    ? "Use this one-time password to change your searchOnMe admin password."
+    : "Use this one-time password to finish signing in to the searchOnMe admin area.";
+
+  return sendEmail({
+    from: fromAddress,
+    to: email,
+    subject: title,
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+        <h2>${title}</h2>
+        <p>${intro}</p>
+        <p style="font-size: 2rem; font-weight: 700; letter-spacing: 0.24em; margin: 20px 0;">${safeCode}</p>
+        <p>This code expires in 10 minutes.</p>
+        <p>If you did not request this, you can safely ignore the email.</p>
+      </div>
+    `
+  });
+};
+
 module.exports = {
+  sendAdminOtpEmail,
   sendVerificationEmail,
   sendAdminNotification,
   sendReplyEmail

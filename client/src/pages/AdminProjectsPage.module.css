@@ -1,0 +1,321 @@
+.section {
+  padding: 48px 0;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.heading,
+.form,
+.listPanel,
+.emptyState {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.heading {
+  margin-bottom: 18px;
+}
+
+.kicker,
+.cardMeta {
+  margin: 0 0 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.heading h1 {
+  margin: 0 0 16px;
+  max-width: 13ch;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(2.6rem, 5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.heading p,
+.status,
+.cardBody,
+.pointsList,
+.helperText,
+.emptyState,
+.cardFooter {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.status {
+  min-height: 24px;
+  margin: 14px 0;
+  font-weight: 600;
+}
+
+.secondaryLink,
+.secondaryButton,
+.loginLink,
+.form button,
+.ghostButton,
+.deleteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.secondaryLink,
+.secondaryButton,
+.loginLink,
+.ghostButton {
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+}
+
+.secondaryButton:disabled,
+.form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.loginLink {
+  margin-bottom: 18px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.formHeader,
+.panelHeader,
+.cardTop,
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.formHeader h2,
+.panelHeader h2,
+.projectCard h3 {
+  margin: 0;
+}
+
+.form label {
+  display: grid;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form input,
+.form textarea,
+.form select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(8, 20, 33, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  outline: none;
+}
+
+.form textarea {
+  resize: vertical;
+}
+
+.checkboxRow {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.checkboxRow input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.helperText {
+  margin: -4px 0 0;
+  font-size: 0.94rem;
+}
+
+.previewPanel {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.previewLabel {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.previewImage,
+.cardImage {
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.previewImage {
+  max-height: 240px;
+}
+
+.galleryGrid,
+.cardGallery {
+  display: grid;
+  gap: 12px;
+}
+
+.galleryGrid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.galleryCard {
+  display: grid;
+  gap: 10px;
+}
+
+.galleryImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  object-fit: cover;
+  background: rgba(8, 20, 33, 0.08);
+}
+
+.galleryMeta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.form button {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), #eefcb1);
+  color: #07111f;
+  cursor: pointer;
+}
+
+.listPanel {
+  display: grid;
+  gap: 16px;
+}
+
+.projectList {
+  display: grid;
+  gap: 14px;
+}
+
+.projectCard {
+  padding: 22px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.cardImage {
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: rgba(8, 20, 33, 0.08);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(216, 255, 87, 0.46);
+  color: #4e6300;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.cardBody {
+  margin: 12px 0 0;
+}
+
+.pointsList {
+  margin: 16px 0 0;
+  padding-left: 18px;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ghostButton,
+.deleteButton {
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.deleteButton {
+  border: 1px solid rgba(180, 35, 24, 0.12);
+  background: rgba(180, 35, 24, 0.12);
+  color: #b42318;
+}
+
+@media (max-width: 1024px) {
+  .layout,
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .heading,
+  .form,
+  .listPanel,
+  .emptyState,
+  .projectCard {
+    padding: 22px;
+  }
+
+  .formHeader,
+  .panelHeader,
+  .cardTop,
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

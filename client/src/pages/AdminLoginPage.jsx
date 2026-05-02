@@ -1,40 +1,194 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { requestJson } from "../utils/api";
 import styles from "./AdminLoginPage.module.css";
 
+const allowedAdminEmails = ["sahidurmiah201920@gmail.com", "quranhadish700@gmail.com"];
+
 function AdminLoginPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [loginForm, setLoginForm] = useState({ email: "", password: "", otp: "" });
+  const [passwordResetForm, setPasswordResetForm] = useState({
+    email: "",
+    otp: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+  const [loginStep, setLoginStep] = useState("credentials");
+  const [mode, setMode] = useState("login");
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const checkSession = async () => {
+      try {
+        await requestJson("/api/admin/session", {
+          credentials: "include"
+        });
+
+        if (!isMounted) {
+          return;
+        }
+
+        setStatus("Active admin session found. Opening admin inbox...");
+        navigate("/admin/messages", { replace: true });
+      } catch (error) {
+        if (!isMounted) {
+          return;
+        }
+
+        setStatus("");
+      } finally {
+        if (isMounted) {
+          setIsCheckingSession(false);
+        }
+      }
+    };
+
+    checkSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
+    if (mode === "login") {
+      setLoginForm((current) => ({ ...current, [name]: value }));
+      return;
+    }
+
+    setPasswordResetForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
-    setStatus("Checking admin credentials...");
+    setStatus(
+      loginStep === "credentials"
+        ? "Checking admin credentials..."
+        : "Verifying OTP and opening admin inbox..."
+    );
 
     try {
-      await requestJson("/api/admin/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(form)
-      });
+      if (loginStep === "credentials") {
+        await requestJson("/api/admin/login", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: loginForm.email,
+            password: loginForm.password
+          })
+        });
 
-      setStatus("Login successful. Opening admin inbox...");
-      navigate("/admin/messages");
+        setLoginStep("otp");
+        setLoginForm((current) => ({ ...current, otp: "" }));
+        setStatus("OTP sent to the admin email. Enter the 6-digit code to continue.");
+      } else {
+        await requestJson("/api/admin/login/verify-otp", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: loginForm.email,
+            otp: loginForm.otp
+          })
+        });
+
+        setStatus("Login successful. Opening admin inbox...");
+        navigate("/admin/messages");
+      }
     } catch (error) {
       setStatus(error.message || "Unable to log in.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handlePasswordResetRequest = async () => {
+    setIsSubmitting(true);
+    setStatus("Sending password reset OTP...");
+
+    try {
+      await requestJson("/api/admin/password-reset/request-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: passwordResetForm.email
+        })
+      });
+
+      setStatus("Password reset OTP sent. Enter the code and your new password below.");
+    } catch (error) {
+      setStatus(error.message || "Unable to send password reset OTP.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePasswordResetSubmit = async (event) => {
+    event.preventDefault();
+
+    if (passwordResetForm.newPassword !== passwordResetForm.confirmPassword) {
+      setStatus("New password and confirm password must match.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setStatus("Verifying OTP and changing password...");
+
+    try {
+      await requestJson("/api/admin/password-reset/complete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: passwordResetForm.email,
+          otp: passwordResetForm.otp,
+          newPassword: passwordResetForm.newPassword
+        })
+      });
+
+      setPasswordResetForm((current) => ({
+        ...current,
+        otp: "",
+        newPassword: "",
+        confirmPassword: ""
+      }));
+      setMode("login");
+      setLoginStep("credentials");
+      setLoginForm((current) => ({
+        ...current,
+        email: passwordResetForm.email,
+        password: "",
+        otp: ""
+      }));
+      setStatus("Password changed successfully. Log in again with the new password.");
+    } catch (error) {
+      setStatus(error.message || "Unable to change password.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const switchMode = (nextMode) => {
+    setMode(nextMode);
+    setStatus("");
+    setIsSubmitting(false);
+    if (nextMode === "login") {
+      setLoginStep("credentials");
     }
   };
 
@@ -44,37 +198,168 @@ function AdminLoginPage() {
         <p className={styles.kicker}>Admin only</p>
         <h1>Upload access is private to Sahidur Miah.</h1>
         <p>
-          Use one of your admin emails to manage resume, educational documents, and image uploads
-          through Cloudinary.
+          Only these admin emails are allowed: {allowedAdminEmails.join(" or ")}.
         </p>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <label>
-            <span>Email</span>
-            <input
-              type="email"
-              name="email"
-              placeholder="admin@example.com"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            <span>Password</span>
-            <input
-              type="password"
-              name="password"
-              placeholder="Your admin password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Logging in..." : "Login as admin"}
+        <div className={styles.modeRow}>
+          <button
+            type="button"
+            className={`${styles.modeButton} ${mode === "login" ? styles.modeButtonActive : ""}`}
+            onClick={() => switchMode("login")}
+            disabled={isCheckingSession}
+          >
+            Admin login
           </button>
-        </form>
+          <button
+            type="button"
+            className={`${styles.modeButton} ${mode === "password-reset" ? styles.modeButtonActive : ""}`}
+            onClick={() => switchMode("password-reset")}
+            disabled={isCheckingSession}
+          >
+            Change password
+          </button>
+        </div>
+
+        {mode === "login" ? (
+          <form className={styles.form} onSubmit={handleLoginSubmit}>
+            <label>
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                placeholder="sahidurmiah201920@gmail.com"
+                value={loginForm.email}
+                onChange={handleChange}
+                disabled={isCheckingSession || loginStep === "otp"}
+                required
+              />
+            </label>
+            {loginStep === "credentials" ? (
+              <label>
+                <span>Password</span>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Your admin password"
+                  value={loginForm.password}
+                  onChange={handleChange}
+                  disabled={isCheckingSession}
+                  required
+                />
+              </label>
+            ) : (
+              <label>
+                <span>OTP</span>
+                <input
+                  type="text"
+                  name="otp"
+                  inputMode="numeric"
+                  pattern="\d{6}"
+                  maxLength="6"
+                  placeholder="Enter 6-digit OTP"
+                  value={loginForm.otp}
+                  onChange={handleChange}
+                  disabled={isCheckingSession}
+                  required
+                />
+              </label>
+            )}
+            <button type="submit" disabled={isSubmitting || isCheckingSession}>
+              {isCheckingSession
+                ? "Checking session..."
+                : isSubmitting
+                  ? loginStep === "credentials"
+                    ? "Sending OTP..."
+                    : "Verifying OTP..."
+                  : loginStep === "credentials"
+                    ? "Continue to OTP"
+                    : "Verify OTP and login"}
+            </button>
+            {loginStep === "otp" ? (
+              <button
+                type="button"
+                className={styles.secondaryAction}
+                onClick={() => {
+                  setLoginStep("credentials");
+                  setLoginForm((current) => ({ ...current, otp: "" }));
+                  setStatus("You can update your password and request a fresh OTP again.");
+                }}
+                disabled={isSubmitting || isCheckingSession}
+              >
+                Go back
+              </button>
+            ) : null}
+          </form>
+        ) : (
+          <form className={styles.form} onSubmit={handlePasswordResetSubmit}>
+            <label>
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                placeholder="quranhadish700@gmail.com"
+                value={passwordResetForm.email}
+                onChange={handleChange}
+                disabled={isCheckingSession}
+                required
+              />
+            </label>
+            <button
+              type="button"
+              className={styles.secondaryAction}
+              onClick={handlePasswordResetRequest}
+              disabled={isSubmitting || isCheckingSession || !passwordResetForm.email}
+            >
+              {isSubmitting ? "Please wait..." : "Send OTP to email"}
+            </button>
+            <label>
+              <span>OTP</span>
+              <input
+                type="text"
+                name="otp"
+                inputMode="numeric"
+                pattern="\d{6}"
+                maxLength="6"
+                placeholder="Enter 6-digit OTP"
+                value={passwordResetForm.otp}
+                onChange={handleChange}
+                disabled={isCheckingSession}
+                required
+              />
+            </label>
+            <label>
+              <span>New password</span>
+              <input
+                type="password"
+                name="newPassword"
+                placeholder="At least 8 characters"
+                value={passwordResetForm.newPassword}
+                onChange={handleChange}
+                disabled={isCheckingSession}
+                required
+              />
+            </label>
+            <label>
+              <span>Confirm new password</span>
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Repeat the new password"
+                value={passwordResetForm.confirmPassword}
+                onChange={handleChange}
+                disabled={isCheckingSession}
+                required
+              />
+            </label>
+            <button type="submit" disabled={isSubmitting || isCheckingSession}>
+              {isCheckingSession
+                ? "Checking session..."
+                : isSubmitting
+                  ? "Changing password..."
+                  : "Verify OTP and change password"}
+            </button>
+          </form>
+        )}
 
         <p className={styles.status} aria-live="polite">
           {status}

@@ -41,6 +41,34 @@
   margin-top: 22px;
 }
 
+.modeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.modeButton,
+.secondaryAction {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modeButton {
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+}
+
+.modeButtonActive {
+  border-color: transparent;
+  background: #07111f;
+  color: #ffffff;
+}
+
 .form label {
   display: grid;
   gap: 10px;
@@ -65,6 +93,12 @@
   color: #07111f;
   font-weight: 700;
   cursor: pointer;
+}
+
+.secondaryAction {
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
 }
 
 .form button:disabled {

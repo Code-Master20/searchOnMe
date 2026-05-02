@@ -1,0 +1,173 @@
+.section {
+  padding: 48px 0;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.heading,
+.form,
+.panel,
+.highlightCard {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.heading {
+  margin-bottom: 18px;
+}
+
+.kicker,
+.panelLabel {
+  margin: 0 0 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.heading h1 {
+  margin: 0 0 16px;
+  max-width: 13ch;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(2.6rem, 5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.heading p,
+.status,
+.helperText {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.status {
+  min-height: 24px;
+  margin: 14px 0;
+  font-weight: 600;
+}
+
+.secondaryLink,
+.secondaryButton,
+.loginLink,
+.form button,
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.secondaryLink,
+.secondaryButton,
+.loginLink,
+.ghostButton {
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+}
+
+.secondaryButton:disabled,
+.form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.loginLink {
+  margin-bottom: 18px;
+}
+
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.formHeader,
+.panelGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.formHeader {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.formHeader h2 {
+  margin: 0;
+}
+
+.panelGrid,
+.highlightsGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.highlightsGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.form label,
+.highlightCard {
+  display: grid;
+  gap: 10px;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(8, 20, 33, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  outline: none;
+}
+
+.form textarea {
+  resize: vertical;
+}
+
+.form button {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), #eefcb1);
+  color: #07111f;
+  cursor: pointer;
+}
+
+.helperText {
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .panelGrid,
+  .highlightsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .heading,
+  .form,
+  .panel,
+  .highlightCard {
+    padding: 22px;
+  }
+
+  .formHeader {
+    grid-template-columns: 1fr;
+  }
+}

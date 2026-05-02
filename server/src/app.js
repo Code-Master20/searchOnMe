@@ -6,8 +6,10 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 const adminRoutes = require("./routes/adminRoutes");
+const aboutRoutes = require("./routes/aboutRoutes");
 const assetRoutes = require("./routes/assetRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const projectRoutes = require("./routes/projectRoutes");
 const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
 
 const app = express();
@@ -43,6 +45,8 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/messages", messageRoutes);
+app.use("/api/about-content", aboutRoutes);
+app.use("/api/projects", projectRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/admin", adminRoutes);
 
