@@ -129,6 +129,14 @@ function ResponsesPage() {
             </div>
             <p>Submitted: {formatDateTime(response.submittedAt)}</p>
             {response.repliedAt ? <p>Replied: {formatDateTime(response.repliedAt)}</p> : null}
+            <div className={styles.messagePanel}>
+              <p className={styles.panelLabel}>Your message</p>
+              <div className={styles.messageBox}>{response.message}</div>
+            </div>
+            <div className={styles.messagePanel}>
+              <p className={styles.panelLabel}>Admin reply</p>
+              <div className={styles.replyBox}>{response.reply}</div>
+            </div>
           </article>
         ))}
       </div>

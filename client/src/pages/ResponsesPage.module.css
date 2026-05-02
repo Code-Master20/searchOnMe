@@ -135,9 +135,43 @@
   margin: 0;
 }
 
+.responseCard > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
 .responseCard h2 {
   margin-top: 12px;
   font-size: 1.2rem;
+}
+
+.messagePanel {
+  display: grid;
+  gap: 8px;
+}
+
+.panelLabel {
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.messageBox,
+.replyBox {
+  min-height: 110px;
+  padding: 14px 16px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--text);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.replyBox {
+  background: rgba(248, 250, 255, 0.72);
 }
 
 .badge {

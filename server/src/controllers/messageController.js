@@ -160,11 +160,13 @@ const getMessageResponses = async (req, res, next) => {
 
     const email = req.body.email.toLowerCase();
     const messages = await Message.find({ email, isVerified: true })
-      .select("_id status createdAt updatedAt")
+      .select("_id message reply status createdAt updatedAt")
       .sort({ createdAt: -1 });
 
     const responses = messages.map((message) => ({
       id: message._id,
+      message: message.message,
+      reply: message.reply || "",
       status: message.status === "replied" ? "replied" : "pending",
       submittedAt: message.createdAt,
       repliedAt: message.status === "replied" ? message.updatedAt : null
