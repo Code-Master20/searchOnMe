@@ -39,8 +39,8 @@ function AdminLoginPage() {
           return;
         }
 
-        setStatus("Active admin session found. Opening admin inbox...");
-        navigate("/admin/messages", { replace: true });
+        setStatus("Active admin session found. Opening admin panel...");
+        navigate("/admin/panel", { replace: true });
       } catch (error) {
         if (!isMounted) {
           return;
@@ -77,7 +77,7 @@ function AdminLoginPage() {
     setStatus(
       loginStep === "credentials"
         ? "Checking admin credentials..."
-        : "Verifying OTP and opening admin inbox..."
+        : "Verifying OTP and opening admin panel..."
     );
 
     try {
@@ -110,9 +110,13 @@ function AdminLoginPage() {
           })
         });
 
+        await requestJson("/api/admin/session", {
+          credentials: "include"
+        });
+
         notifyAdminSessionChanged(true);
-        setStatus("Login successful. Opening admin inbox...");
-        navigate("/admin/messages");
+        setStatus("Login successful. Opening admin panel...");
+        navigate("/admin/panel", { replace: true });
       }
     } catch (error) {
       if (
