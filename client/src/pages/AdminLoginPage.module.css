@@ -76,15 +76,12 @@
 }
 
 .passwordField {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
+  position: relative;
 }
 
 .form input {
   width: 100%;
-  padding: 15px 16px;
+  padding: 15px 56px 15px 16px;
   border: 1px solid rgba(8, 20, 33, 0.14);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.72);
@@ -109,14 +106,21 @@
 }
 
 .visibilityButton {
-  min-width: 78px;
-  min-height: 50px;
-  border: 1px solid rgba(8, 20, 33, 0.12);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
   color: var(--text);
-  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
+  transform: translateY(-50%);
 }
 
 .form button:disabled {

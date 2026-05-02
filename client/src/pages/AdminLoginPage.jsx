@@ -280,8 +280,9 @@ function AdminLoginPage() {
                     className={styles.visibilityButton}
                     onClick={() => togglePasswordVisibility("login")}
                     disabled={isCheckingSession}
+                    aria-label={showPasswords.login ? "Hide password" : "Show password"}
                   >
-                    {showPasswords.login ? "Hide" : "View"}
+                    {showPasswords.login ? "🙈" : "👁️"}
                   </button>
                 </div>
               </label>
@@ -382,8 +383,9 @@ function AdminLoginPage() {
                   className={styles.visibilityButton}
                   onClick={() => togglePasswordVisibility("newPassword")}
                   disabled={isCheckingSession}
+                  aria-label={showPasswords.newPassword ? "Hide new password" : "Show new password"}
                 >
-                  {showPasswords.newPassword ? "Hide" : "View"}
+                  {showPasswords.newPassword ? "🙈" : "👁️"}
                 </button>
               </div>
             </label>
@@ -404,8 +406,13 @@ function AdminLoginPage() {
                   className={styles.visibilityButton}
                   onClick={() => togglePasswordVisibility("confirmPassword")}
                   disabled={isCheckingSession}
+                  aria-label={
+                    showPasswords.confirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
                 >
-                  {showPasswords.confirmPassword ? "Hide" : "View"}
+                  {showPasswords.confirmPassword ? "🙈" : "👁️"}
                 </button>
               </div>
             </label>
