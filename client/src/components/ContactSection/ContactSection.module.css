@@ -1,9 +1,35 @@
 .section {
+  position: relative;
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
   gap: 18px;
   align-items: start;
   padding: 36px 0;
+}
+
+.toast {
+  position: fixed;
+  top: 92px;
+  left: 50%;
+  z-index: 30;
+  min-width: min(90vw, 320px);
+  max-width: min(90vw, 520px);
+  padding: 14px 20px;
+  border: 1px solid rgba(53, 109, 0, 0.14);
+  border-radius: 999px;
+  background: rgba(234, 255, 208, 0.96);
+  box-shadow: 0 16px 38px rgba(8, 20, 33, 0.12);
+  color: #295400;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.toastError {
+  border-color: rgba(180, 35, 24, 0.16);
+  background: rgba(255, 236, 233, 0.98);
+  color: #b42318;
 }
 
 .copy {
@@ -131,6 +157,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 .verificationActions a {
@@ -173,6 +201,11 @@
 }
 
 @media (max-width: 720px) {
+  .toast {
+    top: 78px;
+    border-radius: 22px;
+  }
+
   .copy h2 {
     font-size: clamp(2rem, 10vw, 3.2rem);
   }

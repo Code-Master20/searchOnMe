@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { requestJson } from "../../utils/api";
 import styles from "./ContactSection.module.css";
 
@@ -9,10 +10,93 @@ const initialForm = {
   message: ""
 };
 
+const contactDraftStorageKey = "searchonme-contact-draft";
+
+const normalizeStoredForm = (value = {}) => ({
+  name: typeof value.name === "string" ? value.name : "",
+  email: typeof value.email === "string" ? value.email : "",
+  message: typeof value.message === "string" ? value.message : ""
+});
+
+const readStoredForm = () => {
+  if (typeof window === "undefined") {
+    return initialForm;
+  }
+
+  try {
+    const storedForm = window.sessionStorage.getItem(contactDraftStorageKey);
+
+    if (!storedForm) {
+      return initialForm;
+    }
+
+    return normalizeStoredForm(JSON.parse(storedForm));
+  } catch (error) {
+    return initialForm;
+  }
+};
+
+const isEmptyForm = (value) => !value.name && !value.email && !value.message;
+
 function ContactSection() {
-  const [form, setForm] = useState(initialForm);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [form, setForm] = useState(readStoredForm);
   const [status, setStatus] = useState({ type: "", text: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState({ type: "", text: "" });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      if (isEmptyForm(form)) {
+        window.sessionStorage.removeItem(contactDraftStorageKey);
+        return;
+      }
+
+      window.sessionStorage.setItem(contactDraftStorageKey, JSON.stringify(form));
+    } catch (error) {
+      return;
+    }
+  }, [form]);
+
+  useEffect(() => {
+    const verification = searchParams.get("verification");
+
+    if (!verification) {
+      return undefined;
+    }
+
+    if (verification === "success" || verification === "confirmed") {
+      setForm(initialForm);
+      window.sessionStorage.removeItem(contactDraftStorageKey);
+    }
+
+    if (verification === "success") {
+      setToast({ type: "success", text: "Message successfully sent." });
+      setStatus({ type: "", text: "" });
+    } else if (verification === "confirmed") {
+      setToast({ type: "success", text: "Message already verified." });
+      setStatus({ type: "", text: "" });
+    } else if (verification === "invalid") {
+      setToast({
+        type: "error",
+        text: "This verification link is invalid or has already expired."
+      });
+    }
+
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.delete("verification");
+    setSearchParams(nextSearchParams, { replace: true });
+
+    const timeoutId = window.setTimeout(() => {
+      setToast({ type: "", text: "" });
+    }, 4000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [searchParams, setSearchParams]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -57,6 +141,15 @@ function ContactSection() {
 
   return (
     <section className={styles.section} id="contact">
+      {toast.text ? (
+        <div
+          className={`${styles.toast} ${toast.type === "error" ? styles.toastError : ""}`}
+          aria-live="polite"
+        >
+          {toast.text}
+        </div>
+      ) : null}
+
       <div className={styles.copy}>
         <p className={styles.kicker}>Contact</p>
         <h2>Let&apos;s build something dependable and memorable.</h2>
@@ -126,7 +219,6 @@ function ContactSection() {
               Open Gmail
             </a>
             <Link to={`/responses?email=${encodeURIComponent(form.email)}`}>Check response</Link>
-            <a href="#contact">Back to searchOnMe</a>
           </div>
         )}
       </form>

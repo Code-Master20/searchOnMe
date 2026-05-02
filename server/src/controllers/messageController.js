@@ -15,98 +15,28 @@ const escapeHtml = (value = "") =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-const sendVerificationResponse = (req, res, statusCode, title, message) => {
+const buildVerificationRedirectUrl = (result) => {
+  const clientUrl = process.env.CLIENT_URL || "/";
+
+  if (clientUrl === "/") {
+    return `/contact?verification=${encodeURIComponent(result)}#contact`;
+  }
+
+  const normalizedBase = clientUrl.endsWith("/") ? clientUrl : `${clientUrl}/`;
+  const redirectUrl = new URL("contact", normalizedBase);
+  redirectUrl.searchParams.set("verification", result);
+  redirectUrl.hash = "contact";
+  return redirectUrl.toString();
+};
+
+const sendVerificationResponse = (req, res, statusCode, title, message, result) => {
   const acceptHeader = req.get("accept") || "";
-  const backUrl = escapeHtml(process.env.CLIENT_URL || "/");
 
   if (!acceptHeader.includes("text/html")) {
     return res.status(statusCode).json({ message });
   }
 
-  const safeTitle = escapeHtml(title);
-  const safeMessage = escapeHtml(message);
-
-  return res.status(statusCode).send(`<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${safeTitle}</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        --bg: #07111f;
-        --panel: rgba(8, 18, 36, 0.86);
-        --border: rgba(163, 230, 53, 0.24);
-        --accent: #c5ff6a;
-        --accent-soft: #83e8ff;
-        --text: #f7f8fc;
-        --muted: #b7c2d8;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
-        font-family: "Segoe UI", sans-serif;
-        background:
-          radial-gradient(circle at top left, rgba(131, 232, 255, 0.18), transparent 35%),
-          radial-gradient(circle at bottom right, rgba(197, 255, 106, 0.18), transparent 40%),
-          linear-gradient(135deg, #040913 0%, #07111f 55%, #0d1526 100%);
-        color: var(--text);
-      }
-      .card {
-        width: min(100%, 680px);
-        padding: 40px;
-        border-radius: 28px;
-        border: 1px solid var(--border);
-        background: var(--panel);
-        backdrop-filter: blur(22px);
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-      }
-      .eyebrow {
-        margin: 0 0 12px;
-        font-size: 0.82rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--accent-soft);
-      }
-      h1 {
-        margin: 0 0 16px;
-        font-size: clamp(2rem, 5vw, 3.2rem);
-        line-height: 1;
-      }
-      p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 1.05rem;
-        line-height: 1.7;
-      }
-      a {
-        display: inline-flex;
-        margin-top: 24px;
-        color: #04111f;
-        background: linear-gradient(135deg, var(--accent), #e9ffaf);
-        padding: 14px 18px;
-        border-radius: 999px;
-        font-weight: 700;
-        text-decoration: none;
-      }
-    </style>
-  </head>
-  <body>
-    <main class="card">
-      <p class="eyebrow">searchOnMe verification</p>
-      <h1>${safeTitle}</h1>
-      <p>${safeMessage}</p>
-      <a href="${backUrl}">Back to portfolio</a>
-    </main>
-  </body>
-</html>`);
+  return res.redirect(303, buildVerificationRedirectUrl(result));
 };
 
 const createMessage = async (req, res, next) => {
@@ -189,7 +119,8 @@ const verifyMessage = async (req, res, next) => {
         res,
         404,
         "Link not valid",
-        "This verification link is invalid or has already expired."
+        "This verification link is invalid or has already expired.",
+        "invalid"
       );
     }
 
@@ -199,7 +130,8 @@ const verifyMessage = async (req, res, next) => {
         res,
         200,
         "Already confirmed",
-        "Your message was already verified earlier, so everything is in place."
+        "Your message was already verified earlier, so everything is in place.",
+        "confirmed"
       );
     }
 
@@ -214,7 +146,8 @@ const verifyMessage = async (req, res, next) => {
       res,
       200,
       "Message confirmed",
-      "Your message has been successfully sent. Sahidur Miah has been notified."
+      "Your message has been successfully sent. Sahidur Miah has been notified.",
+      "success"
     );
   } catch (error) {
     return next(error);
