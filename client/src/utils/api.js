@@ -1,3 +1,5 @@
+import { readAdminAuthToken } from "./adminSession";
+
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 export const buildApiUrl = (path) => `${apiBaseUrl}${path}`;
@@ -19,7 +21,17 @@ export const readJsonResponse = async (response) => {
 };
 
 export const requestJson = async (path, options = {}) => {
-  const response = await fetch(buildApiUrl(path), options);
+  const token = readAdminAuthToken();
+  const headers = new Headers(options.headers || {});
+
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const response = await fetch(buildApiUrl(path), {
+    ...options,
+    headers
+  });
   const data = await readJsonResponse(response);
 
   if (!response.ok) {

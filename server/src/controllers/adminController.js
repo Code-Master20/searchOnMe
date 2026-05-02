@@ -131,6 +131,7 @@ const verifyAdminLoginOtp = async (req, res, next) => {
 
     return res.status(200).json({
       message: "Login successful.",
+      token,
       admin: {
         id: admin._id,
         email: admin.email

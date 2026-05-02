@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { requestJson } from "../utils/api";
 import {
   adminSessionChangedEvent,
+  persistAdminAuthToken,
   persistAdminSessionFlag,
   readAdminSessionFlag
 } from "../utils/adminSession";
@@ -70,12 +71,14 @@ function useAdminSession() {
                 isUnauthorizedError)
             ) {
               setIsAdmin(false);
+              persistAdminAuthToken("");
               persistAdminSessionFlag(false);
             }
           }
         } else if (isUnauthorizedError) {
           if (!controller.signal.aborted) {
             setIsAdmin(false);
+            persistAdminAuthToken("");
             persistAdminSessionFlag(false);
           }
         } else if (!controller.signal.aborted) {
@@ -90,6 +93,7 @@ function useAdminSession() {
 
     const handleSessionChange = (event) => {
       if (typeof event.detail?.isAdmin === "boolean") {
+        persistAdminAuthToken(event.detail.isAdmin ? event.detail.token || "" : "");
         persistAdminSessionFlag(event.detail.isAdmin);
         setIsAdmin(event.detail.isAdmin);
         setIsCheckingAdmin(false);

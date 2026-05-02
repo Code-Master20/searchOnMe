@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { requestJson } from "../utils/api";
-import { notifyAdminSessionChanged } from "../utils/adminSession";
+import { notifyAdminSessionChanged, persistAdminAuthToken } from "../utils/adminSession";
 import styles from "./AdminLoginPage.module.css";
 
 const allowedAdminEmails = ["sahidurmiah201920@gmail.com", "quranhadish700@gmail.com"];
@@ -98,7 +98,7 @@ function AdminLoginPage() {
         setLoginForm((current) => ({ ...current, otp: "" }));
         setStatus("OTP sent to the admin email. Enter the 6-digit code to continue.");
       } else {
-        await requestJson("/api/admin/login/verify-otp", {
+        const loginVerificationData = await requestJson("/api/admin/login/verify-otp", {
           method: "POST",
           credentials: "include",
           headers: {
@@ -110,7 +110,8 @@ function AdminLoginPage() {
           })
         });
 
-        notifyAdminSessionChanged(true);
+        persistAdminAuthToken(loginVerificationData.token || "");
+        notifyAdminSessionChanged(true, loginVerificationData.token || "");
         setStatus("Login successful. Opening admin panel...");
         navigate("/admin/panel", { replace: true });
       }

@@ -1,5 +1,6 @@
 export const adminSessionChangedEvent = "searchonme-admin-session-changed";
 const adminSessionStorageKey = "searchonme-admin-session";
+const adminAuthTokenStorageKey = "searchonme-admin-token";
 
 export const readAdminSessionFlag = () => {
   if (typeof window === "undefined") {
@@ -30,17 +31,48 @@ export const persistAdminSessionFlag = (isAdmin) => {
   }
 };
 
-export const notifyAdminSessionChanged = (isAdmin) => {
+export const readAdminAuthToken = () => {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  try {
+    return window.localStorage.getItem(adminAuthTokenStorageKey) || "";
+  } catch (error) {
+    return "";
+  }
+};
+
+export const persistAdminAuthToken = (token) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    if (token) {
+      window.localStorage.setItem(adminAuthTokenStorageKey, token);
+      return;
+    }
+
+    window.localStorage.removeItem(adminAuthTokenStorageKey);
+  } catch (error) {
+    // Ignore storage failures and fall back to cookies only.
+  }
+};
+
+export const notifyAdminSessionChanged = (isAdmin, token = "") => {
   if (typeof window === "undefined") {
     return;
   }
 
   persistAdminSessionFlag(isAdmin);
+  persistAdminAuthToken(isAdmin ? token || readAdminAuthToken() : "");
 
   window.dispatchEvent(
     new CustomEvent(adminSessionChangedEvent, {
       detail: {
-        isAdmin: Boolean(isAdmin)
+        isAdmin: Boolean(isAdmin),
+        token: isAdmin ? token || readAdminAuthToken() : ""
       }
     })
   );

@@ -1,7 +1,17 @@
 const jwt = require("jsonwebtoken");
 
+const getRequestToken = (req) => {
+  const authorization = req.headers?.authorization || "";
+
+  if (authorization.startsWith("Bearer ")) {
+    return authorization.slice("Bearer ".length).trim();
+  }
+
+  return req.cookies?.token || "";
+};
+
 const authMiddleware = (req, res, next) => {
-  const token = req.cookies?.token;
+  const token = getRequestToken(req);
 
   if (!token) {
     return res.status(401).json({ message: "Not authorized. Please log in." });
