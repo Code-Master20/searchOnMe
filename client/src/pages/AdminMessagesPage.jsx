@@ -129,6 +129,9 @@ function AdminMessagesPage() {
   return (
     <section className={styles.section}>
       <div className={styles.actionRow}>
+        <Link className={styles.secondaryLink} to="/admin/panel">
+          Open admin panel
+        </Link>
         <Link className={styles.secondaryLink} to="/admin/about">
           Open about editor
         </Link>

@@ -156,6 +156,9 @@ function AdminAboutPage() {
   return (
     <section className={styles.section}>
       <div className={styles.actionRow}>
+        <Link className={styles.secondaryLink} to="/admin/panel">
+          Open admin panel
+        </Link>
         <Link className={styles.secondaryLink} to="/admin/messages">
           Open admin inbox
         </Link>
@@ -217,7 +220,7 @@ function AdminAboutPage() {
         </label>
 
         <div className={styles.panelGrid}>
-          <div className={styles.panel}>
+          <div className={styles.panel} id="profile-card-editor">
             <p className={styles.panelLabel}>Profile card</p>
             <label>
               <span>Eyebrow</span>
@@ -254,7 +257,7 @@ function AdminAboutPage() {
             </label>
           </div>
 
-          <div className={styles.panel}>
+          <div className={styles.panel} id="education-card-editor">
             <p className={styles.panelLabel}>Education card</p>
             <label>
               <span>Eyebrow</span>
@@ -296,7 +299,7 @@ function AdminAboutPage() {
           <p className={styles.panelLabel}>Highlight cards</p>
           <div className={styles.highlightsGrid}>
             {[1, 2, 3].map((index) => (
-              <div className={styles.highlightCard} key={index}>
+              <div className={styles.highlightCard} key={index} id={`highlight-card-${index}`}>
                 <label>
                   <span>{`Card ${index} title`}</span>
                   <input
@@ -324,7 +327,7 @@ function AdminAboutPage() {
           </div>
         </div>
 
-        <div className={styles.panel}>
+        <div className={styles.panel} id="asset-section-editor">
           <p className={styles.panelLabel}>Asset section</p>
           <label>
             <span>Eyebrow</span>

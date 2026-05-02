@@ -61,6 +61,10 @@
   font-size: 0.92rem;
 }
 
+.adminPanelLink {
+  font-weight: 700;
+}
+
 .navLink::after {
   content: "";
   position: absolute;

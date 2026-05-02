@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import useAdminSession from "../../hooks/useAdminSession";
 import { navLinks } from "../../data/siteContent";
 import styles from "./Header.module.css";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAdmin } = useAdminSession();
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -41,6 +43,17 @@ function Header() {
             {link.label}
           </NavLink>
         ))}
+        {isAdmin ? (
+          <NavLink
+            className={({ isActive }) =>
+              `${styles.navLink} ${styles.adminPanelLink} ${isActive ? styles.active : ""}`.trim()
+            }
+            to="/admin/panel"
+            onClick={closeMenu}
+          >
+            Admin Panel
+          </NavLink>
+        ) : null}
       </nav>
     </header>
   );

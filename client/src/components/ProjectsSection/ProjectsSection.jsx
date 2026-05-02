@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import useAdminSession from "../../hooks/useAdminSession";
 import { requestJson } from "../../utils/api";
 import { defaultProjects, projectsSectionNote } from "../../data/siteContent";
 import styles from "./ProjectsSection.module.css";
@@ -21,6 +23,7 @@ const getProjectImages = (project) => {
 function ProjectsSection() {
   const [projects, setProjects] = useState(defaultProjects);
   const [status, setStatus] = useState("");
+  const { isAdmin } = useAdminSession();
 
   useEffect(() => {
     let isActive = true;
@@ -55,8 +58,15 @@ function ProjectsSection() {
   return (
     <section className={styles.section} id="projects">
       <div className={styles.heading}>
-        <p className={styles.kicker}>Selected Work</p>
-        <h2>Projects that combine implementation discipline with product thinking.</h2>
+        <div>
+          <p className={styles.kicker}>Selected Work</p>
+          <h2>Projects that combine implementation discipline with product thinking.</h2>
+        </div>
+        {isAdmin ? (
+          <Link className={styles.adminControl} to="/admin/projects">
+            Open project manager
+          </Link>
+        ) : null}
       </div>
       <p className={styles.note}>{projectsSectionNote}</p>
       {status ? <p className={styles.status}>{status}</p> : null}
@@ -81,7 +91,14 @@ function ProjectsSection() {
               ) : null}
               <div className={styles.meta}>
                 <span>{project.eyebrow}</span>
-                <span>{project.tag}</span>
+                <div className={styles.metaActions}>
+                  <span>{project.tag}</span>
+                  {isAdmin && project._id ? (
+                    <Link className={styles.editButton} to={`/admin/projects?edit=${project._id}`}>
+                      Edit
+                    </Link>
+                  ) : null}
+                </div>
               </div>
               <h3>{project.title}</h3>
               <p>{project.body}</p>

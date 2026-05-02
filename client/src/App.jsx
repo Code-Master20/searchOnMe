@@ -5,6 +5,7 @@ import AdminAssetsPage from "./pages/AdminAssetsPage";
 import AdminAboutPage from "./pages/AdminAboutPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminMessagesPage from "./pages/AdminMessagesPage";
+import AdminPanelPage from "./pages/AdminPanelPage";
 import AdminProjectsPage from "./pages/AdminProjectsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/responses" element={<ResponsesPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/panel" element={<AdminPanelPage />} />
         <Route path="/admin/about" element={<AdminAboutPage />} />
         <Route path="/admin/messages" element={<AdminMessagesPage />} />
         <Route path="/admin/projects" element={<AdminProjectsPage />} />

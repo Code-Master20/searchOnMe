@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { requestJson } from "../utils/api";
 import styles from "./AdminProjectsPage.module.css";
 
@@ -67,6 +68,7 @@ const formatProjectPayload = (form) => ({
 });
 
 function AdminProjectsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [projects, setProjects] = useState([]);
   const [imageAssets, setImageAssets] = useState([]);
   const [form, setForm] = useState(initialForm);
@@ -80,6 +82,12 @@ function AdminProjectsPage() {
     () => projects.find((project) => project._id === editingId) || null,
     [projects, editingId]
   );
+
+  const beginEdit = (project, nextStatus = `Editing "${project.title}".`) => {
+    setEditingId(project._id);
+    setForm(mapProjectToForm(project));
+    setStatus(nextStatus);
+  };
 
   const loadProjects = async () => {
     setIsLoading(true);
@@ -107,6 +115,25 @@ function AdminProjectsPage() {
   useEffect(() => {
     loadProjects();
   }, []);
+
+  useEffect(() => {
+    const requestedEditId = searchParams.get("edit");
+
+    if (!requestedEditId || projects.length === 0) {
+      return;
+    }
+
+    const matchedProject = projects.find((project) => project._id === requestedEditId);
+
+    if (!matchedProject) {
+      return;
+    }
+
+    beginEdit(matchedProject, `Editing "${matchedProject.title}" from the public Projects section.`);
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.delete("edit");
+    setSearchParams(nextSearchParams, { replace: true });
+  }, [projects, searchParams, setSearchParams]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -211,9 +238,7 @@ function AdminProjectsPage() {
   };
 
   const handleEdit = (project) => {
-    setEditingId(project._id);
-    setForm(mapProjectToForm(project));
-    setStatus(`Editing "${project.title}".`);
+    beginEdit(project);
   };
 
   const handleDelete = async (projectId) => {
@@ -257,6 +282,9 @@ function AdminProjectsPage() {
   return (
     <section className={styles.section}>
       <div className={styles.actionRow}>
+        <Link className={styles.secondaryLink} to="/admin/panel">
+          Open admin panel
+        </Link>
         <Link className={styles.secondaryLink} to="/admin/about">
           Open about editor
         </Link>

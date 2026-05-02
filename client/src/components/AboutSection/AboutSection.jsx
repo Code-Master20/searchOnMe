@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import useAdminSession from "../../hooks/useAdminSession";
 import { defaultAboutContent } from "../../data/siteContent";
 import { requestJson } from "../../utils/api";
 import styles from "./AboutSection.module.css";
@@ -15,6 +16,7 @@ function AboutSection() {
   const [content, setContent] = useState(defaultAboutContent);
   const [assetStatus, setAssetStatus] = useState("");
   const [contentStatus, setContentStatus] = useState("");
+  const { isAdmin } = useAdminSession();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -57,30 +59,58 @@ function AboutSection() {
   return (
     <section className={styles.section} id="about">
       <div className={styles.heading}>
-        <p className={styles.kicker}>About</p>
-        <h2>{content.headingTitle}</h2>
+        <div>
+          <p className={styles.kicker}>About</p>
+          <h2>{content.headingTitle}</h2>
+        </div>
+        {isAdmin ? (
+          <Link className={styles.adminControl} to="/admin/about">
+            Open about editor
+          </Link>
+        ) : null}
       </div>
 
       {contentStatus ? <p className={styles.sectionStatus}>{contentStatus}</p> : null}
 
       <div className={styles.introPanel}>
         <div className={styles.profileCard}>
-          <p className={styles.profileEyebrow}>{content.profileEyebrow}</p>
+          <div className={styles.cardHeader}>
+            <p className={styles.profileEyebrow}>{content.profileEyebrow}</p>
+            {isAdmin ? (
+              <Link className={styles.editButton} to="/admin/about#profile-card-editor">
+                Edit
+              </Link>
+            ) : null}
+          </div>
           <h3>{content.profileTitle}</h3>
           <p>{content.profileBody}</p>
         </div>
 
         <div className={styles.educationCard}>
-          <p className={styles.profileEyebrow}>{content.educationEyebrow}</p>
+          <div className={styles.cardHeader}>
+            <p className={styles.profileEyebrow}>{content.educationEyebrow}</p>
+            {isAdmin ? (
+              <Link className={styles.editButton} to="/admin/about#education-card-editor">
+                Edit
+              </Link>
+            ) : null}
+          </div>
           <h3>{content.educationTitle}</h3>
           <p>{content.educationBody}</p>
         </div>
       </div>
 
       <div className={styles.grid}>
-        {content.highlights.map((card) => (
+        {content.highlights.map((card, index) => (
           <article className={styles.card} key={card.title}>
-            <h3>{card.title}</h3>
+            <div className={styles.cardHeader}>
+              <h3>{card.title}</h3>
+              {isAdmin ? (
+                <Link className={styles.editButton} to={`/admin/about#highlight-card-${index + 1}`}>
+                  Edit
+                </Link>
+              ) : null}
+            </div>
             <p>{card.body}</p>
           </article>
         ))}
@@ -88,7 +118,14 @@ function AboutSection() {
 
       <div className={styles.assetSection}>
         <div className={styles.uploadHeader}>
-          <p className={styles.uploadKicker}>{content.assetEyebrow}</p>
+          <div className={styles.cardHeader}>
+            <p className={styles.uploadKicker}>{content.assetEyebrow}</p>
+            {isAdmin ? (
+              <Link className={styles.editButton} to="/admin/about#asset-section-editor">
+                Edit
+              </Link>
+            ) : null}
+          </div>
           <h3>{content.assetTitle}</h3>
           <p>{content.assetBody}</p>
         </div>

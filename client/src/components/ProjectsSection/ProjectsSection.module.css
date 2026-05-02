@@ -29,6 +29,28 @@
   letter-spacing: -0.03em;
 }
 
+.adminControl,
+.editButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.adminControl {
+  min-height: 46px;
+  padding: 0 18px;
+}
+
 .note {
   max-width: 70ch;
   margin: 0 0 18px;
@@ -87,6 +109,12 @@
   color: var(--muted);
 }
 
+.metaActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .meta span {
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -123,6 +151,12 @@
 @media (max-width: 1024px) {
   .heading {
     align-items: start;
+    flex-direction: column;
+  }
+
+  .meta,
+  .metaActions {
+    align-items: flex-start;
     flex-direction: column;
   }
 
