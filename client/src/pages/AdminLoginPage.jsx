@@ -108,6 +108,20 @@ function AdminLoginPage() {
         navigate("/admin/messages");
       }
     } catch (error) {
+      if (
+        error.message?.includes("Reset the password") ||
+        error.message?.includes("Password reset required")
+      ) {
+        setMode("password-reset");
+        setPasswordResetForm((current) => ({
+          ...current,
+          email: loginForm.email,
+          otp: "",
+          newPassword: "",
+          confirmPassword: ""
+        }));
+      }
+
       setStatus(error.message || "Unable to log in.");
     } finally {
       setIsSubmitting(false);

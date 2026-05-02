@@ -15,6 +15,15 @@ const adminSchema = new mongoose.Schema(
       required: true,
       minlength: 8
     },
+    failedPasswordAttempts: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    mustResetPassword: {
+      type: Boolean,
+      default: false
+    },
     loginOtpHash: {
       type: String,
       default: ""

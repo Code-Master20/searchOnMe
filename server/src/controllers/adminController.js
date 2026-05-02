@@ -27,6 +27,7 @@ const getCookieOptions = () => ({
 const createOtpCode = () => String(crypto.randomInt(100000, 1000000));
 const hashOtpCode = (otpCode) => crypto.createHash("sha256").update(String(otpCode)).digest("hex");
 const otpLifetimeMs = 10 * 60 * 1000;
+const maxPasswordAttempts = 3;
 
 const assertAllowedAdminEmail = (email) => {
   if (!isAllowedAdminEmail(email)) {
@@ -47,11 +48,43 @@ const loginAdmin = async (req, res, next) => {
     assertAllowedAdminEmail(email);
     const admin = await Admin.findOne({ email: email.toLowerCase() });
 
-    if (!admin || !(await admin.matchPassword(password))) {
+    if (!admin) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
+    if (admin.mustResetPassword) {
+      return res.status(423).json({
+        message: "Password reset required. Use OTP verification to change the password, then log in again."
+      });
+    }
+
+    const passwordMatches = await admin.matchPassword(password);
+
+    if (!passwordMatches) {
+      admin.failedPasswordAttempts = Number(admin.failedPasswordAttempts || 0) + 1;
+
+      if (admin.failedPasswordAttempts >= maxPasswordAttempts) {
+        admin.failedPasswordAttempts = maxPasswordAttempts;
+        admin.mustResetPassword = true;
+        admin.loginOtpHash = "";
+        admin.loginOtpExpiresAt = null;
+        await admin.save();
+
+        return res.status(423).json({
+          message:
+            "Wrong password entered three times. Reset the password with OTP verification, then log in again."
+        });
+      }
+
+      await admin.save();
+
+      return res.status(401).json({
+        message: `Invalid email or password. ${maxPasswordAttempts - admin.failedPasswordAttempts} attempt(s) remaining before password reset is required.`
+      });
+    }
+
     const otpCode = createOtpCode();
+    admin.failedPasswordAttempts = 0;
     admin.loginOtpHash = hashOtpCode(otpCode);
     admin.loginOtpExpiresAt = new Date(Date.now() + otpLifetimeMs);
     await admin.save();
@@ -196,6 +229,8 @@ const resetAdminPasswordWithOtp = async (req, res, next) => {
     }
 
     admin.password = newPassword;
+    admin.failedPasswordAttempts = 0;
+    admin.mustResetPassword = false;
     admin.passwordResetOtpHash = "";
     admin.passwordResetOtpExpiresAt = null;
     admin.loginOtpHash = "";
