@@ -4,9 +4,14 @@ import useAdminSession from "../../hooks/useAdminSession";
 import { navLinks } from "../../data/siteContent";
 import styles from "./Header.module.css";
 
+const adminHiddenNavLinks = new Set(["/help", "/contact", "/responses"]);
+
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAdmin } = useAdminSession();
+  const visibleNavLinks = isAdmin
+    ? navLinks.filter((link) => !adminHiddenNavLinks.has(link.href))
+    : navLinks;
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -33,7 +38,7 @@ function Header() {
       </button>
 
       <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`.trim()}>
-        {navLinks.map((link) => (
+        {visibleNavLinks.map((link) => (
           <NavLink
             className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`.trim()}
             to={link.href}
