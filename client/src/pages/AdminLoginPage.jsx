@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { requestJson } from "../utils/api";
+import { notifyAdminSessionChanged } from "../utils/adminSession";
 import styles from "./AdminLoginPage.module.css";
 
 const allowedAdminEmails = ["sahidurmiah201920@gmail.com", "quranhadish700@gmail.com"];
@@ -104,6 +105,7 @@ function AdminLoginPage() {
           })
         });
 
+        notifyAdminSessionChanged(true);
         setStatus("Login successful. Opening admin inbox...");
         navigate("/admin/messages");
       }

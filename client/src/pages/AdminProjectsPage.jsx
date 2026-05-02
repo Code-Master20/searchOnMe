@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { requestJson } from "../utils/api";
+import { notifyAdminSessionChanged } from "../utils/adminSession";
 import styles from "./AdminProjectsPage.module.css";
 
 const initialForm = {
@@ -268,6 +269,7 @@ function AdminProjectsPage() {
         credentials: "include"
       });
 
+      notifyAdminSessionChanged(false);
       setStatus("Logged out successfully.");
     } catch (error) {
       setStatus(error.message || "Unable to log out.");

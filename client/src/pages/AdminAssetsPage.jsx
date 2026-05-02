@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { buildApiUrl, readJsonResponse, requestJson } from "../utils/api";
+import { notifyAdminSessionChanged } from "../utils/adminSession";
 import styles from "./AdminAssetsPage.module.css";
 
 const categoryOptions = [
@@ -44,6 +45,7 @@ function AdminAssetsPage() {
         credentials: "include"
       });
 
+      notifyAdminSessionChanged(false);
       setStatus("Logged out successfully.");
     } catch (error) {
       setStatus(error.message || "Unable to log out.");

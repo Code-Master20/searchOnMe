@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { requestJson } from "../utils/api";
+import { notifyAdminSessionChanged } from "../utils/adminSession";
 import styles from "./AdminPanelPage.module.css";
 
 const formatDateTime = (value) => {
@@ -74,6 +75,7 @@ function AdminPanelPage() {
         credentials: "include"
       });
 
+      notifyAdminSessionChanged(false);
       setStatus("Logged out successfully.");
     } catch (error) {
       setStatus(error.message || "Unable to log out.");
