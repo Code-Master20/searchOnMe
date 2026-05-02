@@ -58,6 +58,23 @@ a {
     transform var(--motion-smooth);
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance, 24px)) scale(0.985);
+  filter: blur(8px);
+  transition:
+    opacity var(--motion-spring),
+    transform var(--motion-spring),
+    filter var(--motion-spring);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.revealVisible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
 button,
 input,
 textarea,
@@ -110,6 +127,13 @@ form {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .reveal,
+  .revealVisible {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 
   *,

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import useAdminSession from "../../hooks/useAdminSession";
 import { requestJson } from "../../utils/api";
 import { defaultProjects, projectsSectionNote } from "../../data/siteContent";
+import Reveal from "../Reveal/Reveal";
 import styles from "./ProjectsSection.module.css";
 
 const getProjectImages = (project) => {
@@ -57,7 +58,7 @@ function ProjectsSection() {
 
   return (
     <section className={styles.section} id="projects">
-      <div className={styles.heading}>
+      <Reveal className={styles.heading}>
         <div>
           <p className={styles.kicker}>Selected Work</p>
           <h2>Projects that combine implementation discipline with product thinking.</h2>
@@ -67,24 +68,36 @@ function ProjectsSection() {
             Open project manager
           </Link>
         ) : null}
-      </div>
-      <p className={styles.note}>{projectsSectionNote}</p>
-      {status ? <p className={styles.status}>{status}</p> : null}
+      </Reveal>
+      <Reveal as="p" className={styles.note} delay={70}>
+        {projectsSectionNote}
+      </Reveal>
+      {status ? (
+        <Reveal as="p" className={styles.status} delay={110}>
+          {status}
+        </Reveal>
+      ) : null}
       <div className={styles.grid}>
         {projects.length > 0 ? (
-          projects.map((project) => (
-            <article
+          projects.map((project, index) => (
+            <Reveal
+              as="article"
               className={`${styles.card} ${project.featured ? styles.featured : ""}`}
               key={project._id || project.title}
+              delay={130 + index * 90}
+              distance="22px"
             >
               {getProjectImages(project).length > 0 ? (
                 <div className={styles.projectGallery}>
-                  {getProjectImages(project).map((image, index) => (
-                    <img
+                  {getProjectImages(project).map((image, imageIndex) => (
+                    <Reveal
+                      as="img"
                       className={styles.projectImage}
-                      key={`${project._id || project.title}-${image.imageUrl}-${index}`}
+                      key={`${project._id || project.title}-${image.imageUrl}-${imageIndex}`}
                       src={image.imageUrl}
                       alt={image.imageAlt || `${project.title} project image`}
+                      delay={180 + imageIndex * 60}
+                      distance="14px"
                     />
                   ))}
                 </div>
@@ -109,13 +122,13 @@ function ProjectsSection() {
                   ))}
                 </ul>
               ) : null}
-            </article>
+            </Reveal>
           ))
         ) : (
-          <div className={styles.emptyState}>
+          <Reveal className={styles.emptyState} delay={140}>
             Sahidur has not published any projects here yet. New work will appear once it is added
             from the admin area.
-          </div>
+          </Reveal>
         )}
       </div>
     </section>

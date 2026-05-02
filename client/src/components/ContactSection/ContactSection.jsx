@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { requestJson } from "../../utils/api";
+import Reveal from "../Reveal/Reveal";
 import styles from "./ContactSection.module.css";
 
 const initialForm = {
@@ -150,7 +151,7 @@ function ContactSection() {
         </div>
       ) : null}
 
-      <div className={styles.copy}>
+      <Reveal className={styles.copy}>
         <p className={styles.kicker}>Contact</p>
         <h2>Let&apos;s build something dependable and memorable.</h2>
         <p>
@@ -161,9 +162,9 @@ function ContactSection() {
           <a href="mailto:sahidurmiah201920@gmail.com">sahidurmiah201920@gmail.com</a>
           <span>searchOnMe / Sahidur Miah</span>
         </div>
-      </div>
+      </Reveal>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <Reveal as="form" className={styles.form} onSubmit={handleSubmit} delay={120}>
         <label>
           <span>Name</span>
           <input
@@ -221,7 +222,7 @@ function ContactSection() {
             <Link to={`/responses?email=${encodeURIComponent(form.email)}`}>Check response</Link>
           </div>
         )}
-      </form>
+      </Reveal>
     </section>
   );
 }

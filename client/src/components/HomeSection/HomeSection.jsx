@@ -1,10 +1,11 @@
 import { chips, metrics } from "../../data/siteContent";
+import Reveal from "../Reveal/Reveal";
 import styles from "./HomeSection.module.css";
 
 function HomeSection() {
   return (
     <section className={styles.section} id="home">
-      <div className={styles.copy}>
+      <Reveal className={styles.copy} delay={40}>
         <p className={styles.kicker}>MERN stack developer / portfolio home</p>
         <h1 className={styles.title}>
           I build modern MERN experiences with
@@ -24,17 +25,17 @@ function HomeSection() {
           </a>
         </div>
         <ul className={styles.metrics}>
-          {metrics.map((item) => (
-            <li key={item.value}>
+          {metrics.map((item, index) => (
+            <Reveal as="li" key={item.value} delay={140 + index * 90} distance="20px">
               <strong>{item.value}</strong>
               <span>{item.label}</span>
-            </li>
+            </Reveal>
           ))}
         </ul>
-      </div>
+      </Reveal>
 
       <div className={styles.panel}>
-        <div className={styles.signalCard}>
+        <Reveal className={styles.signalCard} delay={180}>
           <p className={styles.signalTitle}>Current Focus</p>
           <h2>globMe</h2>
           <p>
@@ -42,15 +43,17 @@ function HomeSection() {
             connected, globally-minded product experience. It is actively evolving, and it anchors
             the next chapter of my portfolio.
           </p>
-        </div>
-        <div className={styles.stackCard}>
+        </Reveal>
+        <Reveal className={styles.stackCard} delay={260}>
           <span className={styles.stackLabel}>Preferred Stack</span>
           <div className={styles.chipRow}>
-            {chips.map((chip) => (
-              <span key={chip}>{chip}</span>
+            {chips.map((chip, index) => (
+              <Reveal as="span" key={chip} delay={320 + index * 55} distance="14px">
+                {chip}
+              </Reveal>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

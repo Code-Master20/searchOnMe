@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import useAdminSession from "../../hooks/useAdminSession";
 import { defaultAboutContent } from "../../data/siteContent";
 import { requestJson } from "../../utils/api";
+import Reveal from "../Reveal/Reveal";
 import styles from "./AboutSection.module.css";
 
 const categoryLabels = {
@@ -58,7 +59,7 @@ function AboutSection() {
 
   return (
     <section className={styles.section} id="about">
-      <div className={styles.heading}>
+      <Reveal className={styles.heading}>
         <div>
           <p className={styles.kicker}>About</p>
           <h2>{content.headingTitle}</h2>
@@ -68,12 +69,16 @@ function AboutSection() {
             Open about editor
           </Link>
         ) : null}
-      </div>
+      </Reveal>
 
-      {contentStatus ? <p className={styles.sectionStatus}>{contentStatus}</p> : null}
+      {contentStatus ? (
+        <Reveal as="p" className={styles.sectionStatus} delay={70}>
+          {contentStatus}
+        </Reveal>
+      ) : null}
 
       <div className={styles.introPanel}>
-        <div className={styles.profileCard}>
+        <Reveal className={styles.profileCard} delay={110}>
           <div className={styles.cardHeader}>
             <p className={styles.profileEyebrow}>{content.profileEyebrow}</p>
             {isAdmin ? (
@@ -84,9 +89,9 @@ function AboutSection() {
           </div>
           <h3>{content.profileTitle}</h3>
           <p>{content.profileBody}</p>
-        </div>
+        </Reveal>
 
-        <div className={styles.educationCard}>
+        <Reveal className={styles.educationCard} delay={190}>
           <div className={styles.cardHeader}>
             <p className={styles.profileEyebrow}>{content.educationEyebrow}</p>
             {isAdmin ? (
@@ -97,26 +102,26 @@ function AboutSection() {
           </div>
           <h3>{content.educationTitle}</h3>
           <p>{content.educationBody}</p>
-        </div>
+        </Reveal>
       </div>
 
       <div className={styles.grid}>
         {content.highlights.map((card, index) => (
-          <article className={styles.card} key={card.title}>
+          <Reveal as="article" className={styles.card} key={card.title} delay={100 + index * 90}>
             <div className={styles.cardHeader}>
               <h3>{card.title}</h3>
               {isAdmin ? (
                 <Link className={styles.editButton} to={`/admin/about#highlight-card-${index + 1}`}>
                   Edit
                 </Link>
-              ) : null}
+                ) : null}
             </div>
             <p>{card.body}</p>
-          </article>
+          </Reveal>
         ))}
       </div>
 
-      <div className={styles.assetSection}>
+      <Reveal className={styles.assetSection} delay={120}>
         <div className={styles.uploadHeader}>
           <div className={styles.cardHeader}>
             <p className={styles.uploadKicker}>{content.assetEyebrow}</p>
@@ -135,8 +140,14 @@ function AboutSection() {
         {assets.length > 0 ? (
           <div className={styles.assetGrid}>
             {["resume", "education", "image"].map((category) =>
-              (groupedAssets[category] || []).map((asset) => (
-                <article className={styles.assetCard} key={asset._id}>
+              (groupedAssets[category] || []).map((asset, index) => (
+                <Reveal
+                  as="article"
+                  className={styles.assetCard}
+                  key={asset._id}
+                  delay={180 + index * 70}
+                  distance="18px"
+                >
                   {asset.resourceType === "image" ? (
                     <img src={asset.secureUrl} alt={asset.title} />
                   ) : (
@@ -149,7 +160,7 @@ function AboutSection() {
                       View asset
                     </a>
                   </div>
-                </article>
+                </Reveal>
               ))
             )}
           </div>
@@ -163,7 +174,7 @@ function AboutSection() {
         <Link className={styles.adminLink} to="/admin/login">
           Admin upload login
         </Link>
-      </div>
+      </Reveal>
     </section>
   );
 }
