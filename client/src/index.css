@@ -11,6 +11,8 @@
   --shadow: 0 24px 80px rgba(16, 32, 51, 0.14);
   --radius-lg: 32px;
   --radius-sm: 16px;
+  --motion-smooth: 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-spring: 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -30,6 +32,9 @@ body {
     radial-gradient(circle at 15% 20%, rgba(102, 216, 255, 0.22), transparent 25%),
     radial-gradient(circle at 85% 15%, rgba(216, 255, 87, 0.3), transparent 30%),
     linear-gradient(180deg, #efe7db 0%, #f4efe7 42%, #fffdf7 100%);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body::before {
@@ -47,14 +52,72 @@ body::before {
 a {
   color: inherit;
   text-decoration: none;
+  transition:
+    color var(--motion-smooth),
+    opacity var(--motion-smooth),
+    transform var(--motion-smooth);
 }
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
+  transition:
+    border-color var(--motion-smooth),
+    box-shadow var(--motion-smooth),
+    background-color var(--motion-smooth),
+    color var(--motion-smooth),
+    transform var(--motion-smooth);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(216, 255, 87, 0.34);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+section,
+article,
+form {
+  will-change: transform, opacity;
 }
 
 #root {
   min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
