@@ -15,13 +15,47 @@
   animation: page-enter 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.skeletonHero,
-.skeletonCard {
-  position: relative;
-  overflow: hidden;
+.skeletonSection,
+.skeletonHome,
+.skeletonColumn,
+.skeletonTwoColumn,
+.skeletonGridThree,
+.skeletonGridTwo,
+.skeletonList,
+.skeletonMetricsRow,
+.skeletonActionRow,
+.skeletonAdminSplit,
+.skeletonField,
+.skeletonContactPoints,
+.skeletonRouteWrap,
+.skeletonToggleRow {
+  display: grid;
+  gap: 20px;
 }
 
-.skeletonHero {
+.skeletonSection,
+.skeletonHome {
+  gap: 28px;
+}
+
+.skeletonTwoColumn,
+.skeletonAdminSplit {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
+  align-items: start;
+}
+
+.skeletonGridThree,
+.skeletonMetricsRow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skeletonGridTwo {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skeletonHeadingBlock,
+.skeletonHeroPanel,
+.skeletonAssetBlock {
   display: grid;
   gap: 14px;
   padding: 36px;
@@ -31,32 +65,62 @@
   box-shadow: var(--shadow);
 }
 
-.skeletonGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+.skeletonAssetBlock {
+  gap: 18px;
 }
 
 .skeletonCard {
+  position: relative;
+  overflow: hidden;
   display: grid;
   gap: 14px;
   padding: 20px;
-  min-height: 260px;
+  min-height: 220px;
   border: 1px solid var(--line);
   border-radius: 28px;
   background: rgba(255, 252, 245, 0.68);
   box-shadow: var(--shadow);
 }
 
-.skeletonKicker,
-.skeletonTitle,
-.skeletonTitleShort,
-.skeletonBody,
-.skeletonBodyWide,
-.skeletonCardMedia,
-.skeletonCardTitle,
-.skeletonCardBody,
-.skeletonCardBodyShort {
+.mediumCard {
+  min-height: 260px;
+}
+
+.tallCard {
+  min-height: 300px;
+}
+
+.formCard {
+  min-height: 420px;
+}
+
+.detailCard {
+  min-height: 380px;
+}
+
+.responseCard {
+  min-height: 250px;
+}
+
+.routesSkeleton {
+  min-height: 180px;
+}
+
+.authCard {
+  width: min(100%, 560px);
+  min-height: 360px;
+  margin: 0 auto;
+}
+
+.metricCard {
+  min-height: 150px;
+}
+
+.skeletonAuthWrap {
+  padding: 22px 0 10px;
+}
+
+.skeletonBar {
   position: relative;
   display: block;
   overflow: hidden;
@@ -64,15 +128,7 @@
   background: rgba(16, 32, 51, 0.08);
 }
 
-.skeletonKicker::after,
-.skeletonTitle::after,
-.skeletonTitleShort::after,
-.skeletonBody::after,
-.skeletonBodyWide::after,
-.skeletonCardMedia::after,
-.skeletonCardTitle::after,
-.skeletonCardBody::after,
-.skeletonCardBodyShort::after {
+.skeletonBar::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -87,60 +143,200 @@
   animation: skeleton-shimmer 1.2s ease-in-out infinite;
 }
 
-.skeletonKicker {
+.kickerBar {
   width: 120px;
   height: 16px;
 }
 
-.skeletonTitle {
+.titleBarWide {
   width: min(100%, 620px);
   height: 50px;
   border-radius: 20px;
 }
 
-.skeletonTitleShort {
+.titleBarMedium {
+  width: min(88%, 520px);
+  height: 48px;
+  border-radius: 20px;
+}
+
+.titleBarShort {
   width: min(78%, 460px);
   height: 50px;
   border-radius: 20px;
 }
 
-.skeletonBody,
-.skeletonBodyWide,
-.skeletonCardTitle,
-.skeletonCardBody,
-.skeletonCardBodyShort {
+.bodyBarWide,
+.bodyBarMedium,
+.cardTitleBar,
+.cardBodyBar,
+.cardBodyWideBar,
+.cardBodyShortBar,
+.metricTextBar,
+.metricTextShortBar,
+.fieldLabelBar,
+.contactLineBar,
+.contactLineShortBar,
+.listItemBar {
   border-radius: 14px;
 }
 
-.skeletonBody {
+.bodyBarWide {
   width: min(90%, 760px);
   height: 18px;
 }
 
-.skeletonBodyWide {
+.bodyBarMedium {
   width: min(82%, 680px);
   height: 18px;
 }
 
-.skeletonCardMedia {
+.mediaBar {
   width: 100%;
   height: 132px;
   border-radius: 22px;
 }
 
-.skeletonCardTitle {
+.cardKickerBar {
+  width: 112px;
+  height: 16px;
+}
+
+.cardTitleBar {
   width: 72%;
   height: 24px;
 }
 
-.skeletonCardBody {
+.cardBodyBar {
   width: 100%;
   height: 16px;
 }
 
-.skeletonCardBodyShort {
+.cardBodyWideBar {
+  width: 92%;
+  height: 16px;
+}
+
+.cardBodyShortBar {
   width: 82%;
   height: 16px;
+}
+
+.buttonBar,
+.buttonBarMuted,
+.toggleBar,
+.actionPillBar {
+  height: 52px;
+  border-radius: 999px;
+}
+
+.buttonBar {
+  width: min(100%, 240px);
+}
+
+.buttonBarMuted {
+  width: min(100%, 210px);
+}
+
+.toggleBar {
+  width: 180px;
+}
+
+.actionPillBar {
+  width: 156px;
+  height: 44px;
+}
+
+.fieldLabelBar {
+  width: 92px;
+  height: 14px;
+}
+
+.fieldInputBar {
+  width: 100%;
+  height: 58px;
+  border-radius: 18px;
+}
+
+.fieldAreaBar {
+  width: 100%;
+  height: 150px;
+  border-radius: 24px;
+}
+
+.metricNumberBar {
+  width: 62px;
+  height: 44px;
+  border-radius: 18px;
+}
+
+.metricTextBar {
+  width: 100%;
+  height: 16px;
+}
+
+.metricTextShortBar {
+  width: 72%;
+  height: 16px;
+}
+
+.chipBar {
+  width: 92px;
+  height: 34px;
+}
+
+.contactLineBar {
+  width: min(100%, 300px);
+  height: 16px;
+}
+
+.contactLineShortBar {
+  width: min(72%, 220px);
+  height: 16px;
+}
+
+.replyBoxBar {
+  width: 100%;
+  height: 170px;
+  border-radius: 24px;
+}
+
+.routeBar {
+  width: 180px;
+  height: 40px;
+  border-radius: 14px;
+}
+
+.actionTileBar {
+  width: 100%;
+  height: 108px;
+  border-radius: 20px;
+}
+
+.listItemBar {
+  width: 100%;
+  height: 74px;
+  border-radius: 18px;
+}
+
+.skeletonChipRow,
+.skeletonActionRow,
+.skeletonToggleRow,
+.skeletonRouteWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skeletonMetricsRow {
+  margin-top: 10px;
+}
+
+.skeletonMessageRow {
+  display: grid;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
 }
 
 .pageFrame {
@@ -171,17 +367,35 @@
     width: min(100% - 20px, 1180px);
   }
 
-  .skeletonHero {
+  .skeletonHeadingBlock,
+  .skeletonHeroPanel,
+  .skeletonAssetBlock {
     padding: 24px;
   }
 
-  .skeletonGrid {
+  .skeletonTwoColumn,
+  .skeletonAdminSplit,
+  .skeletonGridThree,
+  .skeletonGridTwo,
+  .skeletonMetricsRow {
     grid-template-columns: 1fr;
   }
 
-  .skeletonTitle,
-  .skeletonTitleShort {
+  .titleBarWide,
+  .titleBarMedium,
+  .titleBarShort {
     height: 40px;
+  }
+
+  .authCard {
+    width: 100%;
+  }
+
+  .toggleBar,
+  .actionPillBar,
+  .buttonBar,
+  .buttonBarMuted {
+    width: 100%;
   }
 }
 
@@ -191,15 +405,7 @@
     animation: none;
   }
 
-  .skeletonKicker::after,
-  .skeletonTitle::after,
-  .skeletonTitleShort::after,
-  .skeletonBody::after,
-  .skeletonBodyWide::after,
-  .skeletonCardMedia::after,
-  .skeletonCardTitle::after,
-  .skeletonCardBody::after,
-  .skeletonCardBodyShort::after {
+  .skeletonBar::after {
     animation: none;
   }
 }
