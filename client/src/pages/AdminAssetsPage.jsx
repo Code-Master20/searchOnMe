@@ -6,8 +6,12 @@ import styles from "./AdminAssetsPage.module.css";
 
 const categoryOptions = [
   { value: "resume", label: "Resume", accept: ".pdf,.doc,.docx" },
-  { value: "education", label: "Educational document", accept: ".pdf,.doc,.docx,.jpg,.jpeg,.png" },
-  { value: "image", label: "Image / photo", accept: "image/*" }
+  {
+    value: "education",
+    label: "Educational document",
+    accept: ".pdf,.doc,.docx,.jpg,.jpeg,.png",
+  },
+  { value: "image", label: "Image / photo", accept: "image/*" },
 ];
 
 const getAccept = (category) =>
@@ -25,7 +29,7 @@ function AdminAssetsPage() {
 
   const loadAssets = async () => {
     const data = await requestJson("/api/admin/assets", {
-      credentials: "include"
+      credentials: "include",
     });
 
     setAssets(data.data || []);
@@ -42,7 +46,7 @@ function AdminAssetsPage() {
     try {
       await requestJson("/api/admin/logout", {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
       });
 
       notifyAdminSessionChanged(false);
@@ -66,8 +70,8 @@ function AdminAssetsPage() {
       `https://api.cloudinary.com/v1_1/${signatureData.cloudName}/${signatureData.resourceType}/upload`,
       {
         method: "POST",
-        body: formData
-      }
+        body: formData,
+      },
     );
     const data = await readJsonResponse(response);
 
@@ -90,14 +94,17 @@ function AdminAssetsPage() {
     setStatus("Creating admin-only Cloudinary upload signature...");
 
     try {
-      const signaturePayload = await requestJson("/api/admin/assets/signature", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
+      const signaturePayload = await requestJson(
+        "/api/admin/assets/signature",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ category }),
         },
-        body: JSON.stringify({ category })
-      });
+      );
 
       setStatus("Uploading file to Cloudinary...");
       const cloudinaryAsset = await uploadToCloudinary(signaturePayload.data);
@@ -107,7 +114,7 @@ function AdminAssetsPage() {
         method: "POST",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title: title || file.name,
@@ -117,8 +124,8 @@ function AdminAssetsPage() {
           publicId: cloudinaryAsset.public_id,
           resourceType: cloudinaryAsset.resource_type,
           format: cloudinaryAsset.format || "",
-          bytes: cloudinaryAsset.bytes || file.size
-        })
+          bytes: cloudinaryAsset.bytes || file.size,
+        }),
       });
 
       setTitle("");
@@ -139,7 +146,7 @@ function AdminAssetsPage() {
     try {
       await requestJson(`/api/admin/assets/${assetId}`, {
         method: "DELETE",
-        credentials: "include"
+        credentials: "include",
       });
 
       setStatus("Asset removed successfully.");
@@ -174,19 +181,13 @@ function AdminAssetsPage() {
         </button>
       </div>
 
-      <div className={styles.heading}>
-        <p className={styles.kicker}>Admin uploads</p>
-        <h1>Cloudinary asset manager for searchOnMe.</h1>
-        <p>
-          This page is protected by admin login. Only admin accounts can create signed Cloudinary
-          uploads for resume files, educational documents, and photos.
-        </p>
-      </div>
-
       <form className={styles.form} onSubmit={handleUpload}>
         <label>
           <span>Asset type</span>
-          <select value={category} onChange={(event) => setCategory(event.target.value)}>
+          <select
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
             {categoryOptions.map((option) => (
               <option value={option.value} key={option.value}>
                 {option.label}
@@ -214,7 +215,7 @@ function AdminAssetsPage() {
           />
         </label>
         <button type="submit" disabled={isUploading}>
-          {isUploading ? "Uploading..." : "Upload to Cloudinary"}
+          {isUploading ? "Uploading..." : "Upload Assets"}
         </button>
       </form>
 
@@ -222,7 +223,8 @@ function AdminAssetsPage() {
         {status}
       </p>
 
-      {status.toLowerCase().includes("authorized") || status.toLowerCase().includes("login") ? (
+      {status.toLowerCase().includes("authorized") ||
+      status.toLowerCase().includes("login") ? (
         <Link className={styles.loginLink} to="/admin/login">
           Go to admin login
         </Link>
@@ -235,7 +237,9 @@ function AdminAssetsPage() {
               {asset.resourceType === "image" ? (
                 <img src={asset.secureUrl} alt={asset.title} />
               ) : (
-                <div className={styles.fileBadge}>{asset.format || asset.resourceType}</div>
+                <div className={styles.fileBadge}>
+                  {asset.format || asset.resourceType}
+                </div>
               )}
               <div>
                 <p className={styles.assetCategory}>{asset.category}</p>
@@ -251,8 +255,8 @@ function AdminAssetsPage() {
           ))
         ) : (
           <div className={styles.emptyState}>
-            No portfolio assets uploaded yet. Use the form above to publish resume files,
-            education documents, or images.
+            No portfolio assets uploaded yet. Use the form above to publish
+            resume files, education documents, or images.
           </div>
         )}
       </div>
