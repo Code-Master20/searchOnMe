@@ -5,6 +5,8 @@ import { requestJson } from "../utils/api";
 import { notifyAdminSessionChanged } from "../utils/adminSession";
 import styles from "./AdminProjectsPage.module.css";
 
+const maxProjectImages = 10;
+
 const initialForm = {
   eyebrow: "",
   tag: "",
@@ -160,6 +162,11 @@ function AdminProjectsPage() {
   const handleAddImage = () => {
     if (!form.imageUrl) {
       setStatus("Choose an image first before adding it to the project.");
+      return;
+    }
+
+    if (form.projectImages.length >= maxProjectImages) {
+      setStatus(`A project can include up to ${maxProjectImages} images.`);
       return;
     }
 
@@ -422,6 +429,10 @@ function AdminProjectsPage() {
           <button type="button" className={styles.ghostButton} onClick={handleAddImage}>
             Add image to project
           </button>
+
+          <p className={styles.helperText}>
+            You can attach up to {maxProjectImages} images to each project.
+          </p>
 
           {imageAssets.length === 0 ? (
             <p className={styles.helperText}>

@@ -138,7 +138,10 @@ const projectValidators = [
     .trim()
     .isLength({ max: 180 })
     .withMessage("Image alt text must not exceed 180 characters."),
-  body("images").optional({ nullable: true }).isArray().withMessage("Images must be an array."),
+  body("images")
+    .optional({ nullable: true })
+    .isArray({ max: 10 })
+    .withMessage("Images must be an array with up to 10 items."),
   body("images.*.imageUrl")
     .optional()
     .isURL()

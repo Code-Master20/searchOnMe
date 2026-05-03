@@ -17,7 +17,8 @@ const normalizeImages = (images = [], fallbackPayload = {}) => {
         imageUrl: String(image?.imageUrl || "").trim(),
         imageAlt: String(image?.imageAlt || "").trim()
       }))
-      .filter((image) => image.imageUrl);
+      .filter((image) => image.imageUrl)
+      .slice(0, 10);
   }
 
   const fallbackImageUrl = String(fallbackPayload.imageUrl || "").trim();
