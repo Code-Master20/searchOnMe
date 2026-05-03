@@ -18,7 +18,17 @@ const categoryOptions = [
 const getAccept = (category) =>
   categoryOptions.find((option) => option.value === category)?.accept || "*/*";
 
-const shouldRenderImagePreview = (asset) => asset.category === "image";
+const getAssetPreviewUrl = (asset) => {
+  if (asset.category === "image") {
+    return asset.secureUrl;
+  }
+
+  if (String(asset.format || "").toLowerCase() === "pdf" && asset.resourceType === "image") {
+    return asset.secureUrl.replace(/\.pdf(?=$|[?#])/i, ".jpg");
+  }
+
+  return "";
+};
 const formatBytes = (value) => {
   const bytes = Number(value || 0);
 
@@ -259,8 +269,8 @@ function AdminAssetsPage() {
         {assets.length > 0 ? (
           assets.map((asset) => (
             <article className={styles.assetCard} key={asset._id}>
-              {shouldRenderImagePreview(asset) ? (
-                <img src={asset.secureUrl} alt={asset.title} />
+              {getAssetPreviewUrl(asset) ? (
+                <img src={getAssetPreviewUrl(asset)} alt={asset.title} />
               ) : (
                 <div className={styles.fileBadge}>
                   {asset.format || asset.resourceType}

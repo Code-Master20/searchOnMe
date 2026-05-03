@@ -6,7 +6,17 @@ import { requestJson } from "../../utils/api";
 import Reveal from "../Reveal/Reveal";
 import styles from "./AboutSection.module.css";
 
-const shouldRenderImagePreview = (asset) => asset.category === "image";
+const getAssetPreviewUrl = (asset) => {
+  if (asset.category === "image") {
+    return asset.secureUrl;
+  }
+
+  if (String(asset.format || "").toLowerCase() === "pdf" && asset.resourceType === "image") {
+    return asset.secureUrl.replace(/\.pdf(?=$|[?#])/i, ".jpg");
+  }
+
+  return "";
+};
 
 function AboutSection() {
   const [assets, setAssets] = useState([]);
@@ -136,8 +146,8 @@ function AboutSection() {
                 delay={180 + index * 70}
                 distance="18px"
               >
-                {shouldRenderImagePreview(asset) ? (
-                  <img src={asset.secureUrl} alt={asset.title} />
+                {getAssetPreviewUrl(asset) ? (
+                  <img src={getAssetPreviewUrl(asset)} alt={asset.title} />
                 ) : (
                   <div className={styles.documentBadge}>{asset.format || "file"}</div>
                 )}
