@@ -306,15 +306,6 @@ function AdminProjectsPage() {
         </button>
       </div>
 
-      <div className={styles.heading}>
-        <p className={styles.kicker}>Admin projects</p>
-        <h1>Publish and maintain projects for the public portfolio page.</h1>
-        <p>
-          Use this protected space to add project details, set featured work, control order, and
-          update the Projects navigation whenever new work is ready.
-        </p>
-      </div>
-
       <p className={styles.status} aria-live="polite">
         {status}
       </p>
