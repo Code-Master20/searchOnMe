@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { chips, metrics } from "../../data/siteContent";
 import Reveal from "../Reveal/Reveal";
 import styles from "./HomeSection.module.css";
@@ -17,12 +18,12 @@ function HomeSection() {
           the systems I&apos;m building now.
         </p>
         <div className={styles.actions}>
-          <a className={styles.primaryButton} href="#contact">
+          <Link className={styles.primaryButton} to="/contact">
             Start a conversation
-          </a>
-          <a className={styles.secondaryButton} href="#this-project">
+          </Link>
+          <Link className={styles.secondaryButton} to="/this-project">
             Explore this project
-          </a>
+          </Link>
         </div>
         <ul className={styles.metrics}>
           {metrics.map((item, index) => (
