@@ -3,7 +3,8 @@ const crypto = require("crypto");
 const categories = {
   resume: "resume",
   education: "education",
-  image: "images"
+  image: "images",
+  file: "files"
 };
 
 const getCloudinaryConfig = () => {

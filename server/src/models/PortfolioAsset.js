@@ -10,7 +10,7 @@ const portfolioAssetSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["resume", "education", "image"],
+      enum: ["resume", "education", "image", "file"],
       required: true
     },
     originalName: {

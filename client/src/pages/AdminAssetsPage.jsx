@@ -12,10 +12,35 @@ const categoryOptions = [
     accept: ".pdf,.doc,.docx,.jpg,.jpeg,.png",
   },
   { value: "image", label: "Image / photo", accept: "image/*" },
+  { value: "file", label: "Private file / other", accept: "*/*" },
 ];
 
 const getAccept = (category) =>
   categoryOptions.find((option) => option.value === category)?.accept || "*/*";
+
+const shouldRenderImagePreview = (asset) => asset.category === "image";
+const formatBytes = (value) => {
+  const bytes = Number(value || 0);
+
+  if (!bytes) {
+    return "Size unavailable";
+  }
+
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+
+  const units = ["KB", "MB", "GB", "TB"];
+  let size = bytes / 1024;
+  let unitIndex = 0;
+
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex += 1;
+  }
+
+  return `${size.toFixed(size >= 10 ? 0 : 1)} ${units[unitIndex]}`;
+};
 
 function AdminAssetsPage() {
   const [assets, setAssets] = useState([]);
@@ -199,7 +224,7 @@ function AdminAssetsPage() {
           <span>Title</span>
           <input
             type="text"
-            placeholder="Example: Sahidur Miah Resume"
+            placeholder="Example: Sahidur Miah Resume or Portfolio Archive"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
@@ -234,7 +259,7 @@ function AdminAssetsPage() {
         {assets.length > 0 ? (
           assets.map((asset) => (
             <article className={styles.assetCard} key={asset._id}>
-              {asset.resourceType === "image" ? (
+              {shouldRenderImagePreview(asset) ? (
                 <img src={asset.secureUrl} alt={asset.title} />
               ) : (
                 <div className={styles.fileBadge}>
@@ -244,19 +269,28 @@ function AdminAssetsPage() {
               <div>
                 <p className={styles.assetCategory}>{asset.category}</p>
                 <h3>{asset.title}</h3>
-                <a href={asset.secureUrl} target="_blank" rel="noreferrer">
-                  Open asset
-                </a>
-                <button type="button" onClick={() => handleDelete(asset._id)}>
-                  Remove
-                </button>
+                <p className={styles.assetMeta}>{asset.originalName}</p>
+                <p className={styles.assetMeta}>
+                  {asset.format || asset.resourceType} / {formatBytes(asset.bytes)}
+                </p>
+                <div className={styles.assetActions}>
+                  <a href={asset.secureUrl} target="_blank" rel="noreferrer">
+                    Open asset
+                  </a>
+                  <a href={asset.secureUrl} target="_blank" rel="noreferrer" download={asset.originalName || asset.title}>
+                    Download
+                  </a>
+                  <button type="button" onClick={() => handleDelete(asset._id)}>
+                    Remove
+                  </button>
+                </div>
               </div>
             </article>
           ))
         ) : (
           <div className={styles.emptyState}>
             No portfolio assets uploaded yet. Use the form above to publish
-            resume files, education documents, or images.
+            resumes, education documents, images, or private files.
           </div>
         )}
       </div>

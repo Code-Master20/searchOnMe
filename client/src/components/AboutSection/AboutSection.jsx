@@ -6,6 +6,8 @@ import { requestJson } from "../../utils/api";
 import Reveal from "../Reveal/Reveal";
 import styles from "./AboutSection.module.css";
 
+const shouldRenderImagePreview = (asset) => asset.category === "image";
+
 function AboutSection() {
   const [assets, setAssets] = useState([]);
   const [content, setContent] = useState(defaultAboutContent);
@@ -134,7 +136,7 @@ function AboutSection() {
                 delay={180 + index * 70}
                 distance="18px"
               >
-                {asset.resourceType === "image" ? (
+                {shouldRenderImagePreview(asset) ? (
                   <img src={asset.secureUrl} alt={asset.title} />
                 ) : (
                   <div className={styles.documentBadge}>{asset.format || "file"}</div>

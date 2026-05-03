@@ -29,7 +29,8 @@
 }
 
 .status,
-.assetCard a {
+.assetCard a,
+.assetMeta {
   color: var(--muted);
   line-height: 1.8;
 }
@@ -138,15 +139,39 @@
   margin: 0 0 8px;
 }
 
+.assetMeta {
+  margin: 0;
+}
+
+.assetActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
 .assetCard a {
   display: inline-flex;
-  margin-right: 10px;
   font-weight: 700;
 }
 
+.assetActions a,
 .assetCard button {
   min-height: 40px;
   padding: 0 14px;
+  border-radius: 999px;
+}
+
+.assetActions a {
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.assetCard button {
   background: rgba(180, 35, 24, 0.12);
   color: #b42318;
 }

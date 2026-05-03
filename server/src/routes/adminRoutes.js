@@ -242,8 +242,8 @@ router.post(
   [
     authMiddleware,
     body("category")
-      .isIn(["resume", "education", "image"])
-      .withMessage("Category must be resume, education, or image.")
+      .isIn(["resume", "education", "image", "file"])
+      .withMessage("Category must be resume, education, image, or file.")
   ],
   getUploadSignature
 );
@@ -254,8 +254,8 @@ router.post(
     authMiddleware,
     body("title").trim().notEmpty().withMessage("Title is required.").isLength({ max: 160 }),
     body("category")
-      .isIn(["resume", "education", "image"])
-      .withMessage("Category must be resume, education, or image."),
+      .isIn(["resume", "education", "image", "file"])
+      .withMessage("Category must be resume, education, image, or file."),
     body("originalName").trim().notEmpty().withMessage("Original file name is required."),
     body("secureUrl").trim().isURL().withMessage("Cloudinary secure URL is required."),
     body("publicId").trim().notEmpty().withMessage("Cloudinary public id is required."),
