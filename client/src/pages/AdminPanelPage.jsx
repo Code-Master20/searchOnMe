@@ -112,15 +112,6 @@ function AdminPanelPage() {
         </button>
       </div>
 
-      <div className={styles.heading}>
-        <p className={styles.kicker}>Admin panel</p>
-        <h1>One private control center for messages, content, projects, and assets.</h1>
-        <p>
-          This dashboard is visible only to the logged-in admin and brings the main portfolio
-          actions into one place.
-        </p>
-      </div>
-
       <p className={styles.status} aria-live="polite">
         {status}
       </p>
