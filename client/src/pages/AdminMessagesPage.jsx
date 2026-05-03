@@ -12,6 +12,24 @@ const formatDateTime = (value) => {
   return new Date(value).toLocaleString();
 };
 
+const sortMessages = (messages, sortDirection) =>
+  [...messages].sort((left, right) => {
+    const leftTime = new Date(left.createdAt || 0).getTime();
+    const rightTime = new Date(right.createdAt || 0).getTime();
+
+    return sortDirection === "oldest" ? leftTime - rightTime : rightTime - leftTime;
+  });
+
+const getAdjacentMessageId = (messages, currentId) => {
+  const currentIndex = messages.findIndex((message) => message._id === currentId);
+
+  if (currentIndex === -1) {
+    return messages[0]?._id || "";
+  }
+
+  return messages[currentIndex + 1]?._id || messages[currentIndex - 1]?._id || currentId;
+};
+
 function AdminMessagesPage() {
   const [messages, setMessages] = useState([]);
   const [selectedId, setSelectedId] = useState("");
@@ -20,11 +38,18 @@ function AdminMessagesPage() {
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSendingReply, setIsSendingReply] = useState(false);
+  const [isDeletingMessage, setIsDeletingMessage] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [sortDirection, setSortDirection] = useState("newest");
+
+  const sortedMessages = useMemo(
+    () => sortMessages(messages, sortDirection),
+    [messages, sortDirection]
+  );
 
   const selectedSummary = useMemo(
-    () => messages.find((message) => message._id === selectedId) || null,
-    [messages, selectedId]
+    () => sortedMessages.find((message) => message._id === selectedId) || null,
+    [sortedMessages, selectedId]
   );
 
   const loadMessageDetail = async (messageId) => {
@@ -55,8 +80,10 @@ function AdminMessagesPage() {
         return;
       }
 
+      const sortedNextMessages = sortMessages(nextMessages, sortDirection);
       const nextSelectedId =
-        nextMessages.find((message) => message._id === selectedId)?._id || nextMessages[0]._id;
+        sortedNextMessages.find((message) => message._id === selectedId)?._id ||
+        sortedNextMessages[0]._id;
 
       await loadMessageDetail(nextSelectedId);
       setStatus("");
@@ -82,6 +109,7 @@ function AdminMessagesPage() {
     setStatus("Sending reply...");
 
     try {
+      const nextMessageId = getAdjacentMessageId(sortedMessages, selectedMessage._id);
       const data = await requestJson(`/api/admin/reply/${selectedMessage._id}`, {
         method: "POST",
         credentials: "include",
@@ -97,6 +125,11 @@ function AdminMessagesPage() {
       setMessages((current) =>
         current.map((message) => (message._id === updatedMessage._id ? updatedMessage : message))
       );
+
+      if (nextMessageId && nextMessageId !== updatedMessage._id) {
+        await loadMessageDetail(nextMessageId);
+      }
+
       setStatus("Reply sent successfully.");
     } catch (error) {
       setStatus(error.message || "Unable to send reply.");
@@ -127,6 +160,48 @@ function AdminMessagesPage() {
   const showLoginLink =
     status.toLowerCase().includes("authorized") || status.toLowerCase().includes("login");
   const canReply = Boolean(selectedMessage?.isVerified);
+  const hasExistingReply = (selectedMessage?.status || selectedSummary?.status) === "replied";
+  const canEditReply = canReply && !hasExistingReply;
+  const canDeleteSelectedMessage = Boolean(selectedMessage?._id || selectedSummary?._id);
+
+  const handleDeleteMessage = async () => {
+    const messageToDelete = selectedMessage || selectedSummary;
+
+    if (!messageToDelete) {
+      return;
+    }
+
+    setIsDeletingMessage(true);
+    setStatus("Deleting message...");
+
+    try {
+      const nextSelectedId = getAdjacentMessageId(sortedMessages, messageToDelete._id);
+
+      await requestJson(`/api/admin/messages/${messageToDelete._id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+
+      const remainingMessages = sortedMessages.filter((message) => message._id !== messageToDelete._id);
+      setMessages((current) => current.filter((message) => message._id !== messageToDelete._id));
+
+      if (remainingMessages.length === 0) {
+        setSelectedId("");
+        setSelectedMessage(null);
+        setReply("");
+      } else {
+        const fallbackMessageId = remainingMessages.find((message) => message._id === nextSelectedId)?._id;
+        const nextMessageId = fallbackMessageId || remainingMessages[0]._id;
+        await loadMessageDetail(nextMessageId);
+      }
+
+      setStatus("Message deleted successfully.");
+    } catch (error) {
+      setStatus(error.message || "Unable to delete message.");
+    } finally {
+      setIsDeletingMessage(false);
+    }
+  };
 
   return (
     <section className={styles.section}>
@@ -175,15 +250,28 @@ function AdminMessagesPage() {
       <div className={styles.layout}>
         <div className={styles.listPanel}>
           <div className={styles.panelHeader}>
-            <h2>Messages</h2>
-            <span>{messages.length}</span>
+            <div>
+              <h2>Messages</h2>
+              <span>{messages.length}</span>
+            </div>
+
+            <label className={styles.sortControl}>
+              <span>Order</span>
+              <select
+                value={sortDirection}
+                onChange={(event) => setSortDirection(event.target.value)}
+              >
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+              </select>
+            </label>
           </div>
 
           {isLoading ? (
             <p className={styles.emptyState}>Loading admin messages...</p>
           ) : messages.length > 0 ? (
             <div className={styles.messageList}>
-              {messages.map((message) => (
+              {sortedMessages.map((message) => (
                 <button
                   type="button"
                   key={message._id}
@@ -257,7 +345,7 @@ function AdminMessagesPage() {
                     value={reply}
                     onChange={(event) => setReply(event.target.value)}
                     placeholder="Write your reply here..."
-                    disabled={!canReply || isSendingReply}
+                    disabled={!canEditReply || isSendingReply}
                     required
                   />
                 </label>
@@ -265,9 +353,21 @@ function AdminMessagesPage() {
                   <p className={styles.helperText}>
                     This message must be verified before a reply can be sent.
                   </p>
+                ) : hasExistingReply ? (
+                  <p className={styles.helperText}>
+                    This message has already been replied to, so the reply is now read-only.
+                  </p>
                 ) : null}
-                <button type="submit" disabled={!canReply || isSendingReply}>
-                  {isSendingReply ? "Sending..." : "Send reply"}
+                <button type="submit" disabled={!canEditReply || isSendingReply}>
+                  {isSendingReply ? "Sending..." : hasExistingReply ? "Reply sent" : "Send reply"}
+                </button>
+                <button
+                  type="button"
+                  className={styles.deleteButton}
+                  onClick={handleDeleteMessage}
+                  disabled={!canDeleteSelectedMessage || isDeletingMessage || isSendingReply}
+                >
+                  {isDeletingMessage ? "Deleting..." : "Delete query"}
                 </button>
               </form>
             </>

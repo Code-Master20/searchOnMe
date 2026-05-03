@@ -187,8 +187,31 @@ const replyToMessage = async (req, res, next) => {
   }
 };
 
+const deleteMessage = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: "Validation failed", errors: errors.array() });
+    }
+
+    const deletedMessage = await Message.findByIdAndDelete(req.params.id);
+
+    if (!deletedMessage) {
+      return res.status(404).json({ message: "Message not found." });
+    }
+
+    return res.status(200).json({
+      message: "Message deleted successfully.",
+      data: deletedMessage
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   createMessage,
+  deleteMessage,
   getMessageResponses,
   verifyMessage,
   replyToMessage

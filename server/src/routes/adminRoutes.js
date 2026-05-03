@@ -26,7 +26,7 @@ const {
   sendPasswordResetOtp,
   verifyAdminLoginOtp
 } = require("../controllers/adminController");
-const { replyToMessage } = require("../controllers/messageController");
+const { deleteMessage, replyToMessage } = require("../controllers/messageController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -216,6 +216,11 @@ router.get(
   "/messages/:id",
   [authMiddleware, param("id").isMongoId().withMessage("Invalid message id.")],
   getMessageById
+);
+router.delete(
+  "/messages/:id",
+  [authMiddleware, param("id").isMongoId().withMessage("Invalid message id.")],
+  deleteMessage
 );
 router.post(
   "/reply/:id",
