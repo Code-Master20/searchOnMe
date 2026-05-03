@@ -48,6 +48,20 @@ const getProjects = async (req, res, next) => {
   }
 };
 
+const getProjectById = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+
+    return res.status(200).json({ data: project });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const getAdminProjects = async (req, res, next) => {
   try {
     const projects = await Project.find().sort({ displayOrder: 1, createdAt: -1 });
@@ -146,6 +160,7 @@ module.exports = {
   createProject,
   deleteProject,
   getAdminProjects,
+  getProjectById,
   getProjects,
   updateProject
 };

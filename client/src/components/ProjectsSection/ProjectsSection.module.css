@@ -126,6 +126,21 @@
   font-size: 1.25rem;
 }
 
+.projectLink,
+.readMoreLink {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.projectLink {
+  transition: opacity 180ms ease;
+}
+
+.projectLink:hover,
+.projectLink:focus-visible {
+  opacity: 0.72;
+}
+
 .card p {
   margin: 0;
   color: var(--muted);
@@ -137,6 +152,19 @@
   padding-left: 18px;
   color: var(--muted);
   line-height: 1.8;
+}
+
+.readMoreLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin-top: 18px;
+  padding: 0 16px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  font-weight: 700;
 }
 
 .emptyState {

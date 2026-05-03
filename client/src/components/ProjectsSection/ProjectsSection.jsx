@@ -113,7 +113,15 @@ function ProjectsSection() {
                   ) : null}
                 </div>
               </div>
-              <h3>{project.title}</h3>
+              {project._id ? (
+                <h3>
+                  <Link className={styles.projectLink} to={`/projects/${project._id}`}>
+                    {project.title}
+                  </Link>
+                </h3>
+              ) : (
+                <h3>{project.title}</h3>
+              )}
               <p>{project.body}</p>
               {project.points?.length ? (
                 <ul>
@@ -121,6 +129,11 @@ function ProjectsSection() {
                     <li key={point}>{point}</li>
                   ))}
                 </ul>
+              ) : null}
+              {project._id ? (
+                <Link className={styles.readMoreLink} to={`/projects/${project._id}`}>
+                  Read more about this project
+                </Link>
               ) : null}
             </Reveal>
           ))
