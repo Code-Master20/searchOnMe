@@ -6,12 +6,6 @@ import { requestJson } from "../../utils/api";
 import Reveal from "../Reveal/Reveal";
 import styles from "./AboutSection.module.css";
 
-const categoryLabels = {
-  resume: "Resume",
-  education: "Education",
-  image: "Photo"
-};
-
 function AboutSection() {
   const [assets, setAssets] = useState([]);
   const [content, setContent] = useState(defaultAboutContent);
@@ -45,15 +39,8 @@ function AboutSection() {
     return () => controller.abort();
   }, []);
 
-  const groupedAssets = useMemo(
-    () =>
-      assets.reduce(
-        (groups, asset) => ({
-          ...groups,
-          [asset.category]: [...(groups[asset.category] || []), asset]
-        }),
-        {}
-      ),
+  const resumeAssets = useMemo(
+    () => assets.filter((asset) => asset.category === "resume"),
     [assets]
   );
 
@@ -137,37 +124,42 @@ function AboutSection() {
 
         {assetStatus ? <p className={styles.assetStatus}>{assetStatus}</p> : null}
 
-        {assets.length > 0 ? (
+        {resumeAssets.length > 0 ? (
           <div className={styles.assetGrid}>
-            {["resume", "education", "image"].map((category) =>
-              (groupedAssets[category] || []).map((asset, index) => (
-                <Reveal
-                  as="article"
-                  className={styles.assetCard}
-                  key={asset._id}
-                  delay={180 + index * 70}
-                  distance="18px"
-                >
-                  {asset.resourceType === "image" ? (
-                    <img src={asset.secureUrl} alt={asset.title} />
-                  ) : (
-                    <div className={styles.documentBadge}>{asset.format || "file"}</div>
-                  )}
-                  <div>
-                    <p>{categoryLabels[category]}</p>
-                    <h4>{asset.title}</h4>
-                    <a href={asset.secureUrl} target="_blank" rel="noreferrer">
-                      View asset
+            {resumeAssets.map((asset, index) => (
+              <Reveal
+                as="article"
+                className={styles.assetCard}
+                key={asset._id}
+                delay={180 + index * 70}
+                distance="18px"
+              >
+                {asset.resourceType === "image" ? (
+                  <img src={asset.secureUrl} alt={asset.title} />
+                ) : (
+                  <div className={styles.documentBadge}>{asset.format || "file"}</div>
+                )}
+                <div>
+                  <p>Resume</p>
+                  <h4>{asset.title}</h4>
+                  <div className={styles.assetActions}>
+                    <a
+                      href={asset.secureUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      download={asset.originalName || asset.title}
+                    >
+                      Download resume
                     </a>
+                    <Link to="/contact?intent=interview#contact">Invite for interview</Link>
                   </div>
-                </Reveal>
-              ))
-            )}
+                </div>
+              </Reveal>
+            ))}
           </div>
         ) : (
           <p className={styles.emptyAssets}>
-            No portfolio files are published yet. Admin can add resume, education documents, and
-            photos from the private dashboard.
+            No public resume is published yet. Admin can add it from the private dashboard.
           </p>
         )}
 

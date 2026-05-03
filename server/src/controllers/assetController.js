@@ -58,6 +58,17 @@ const createAsset = async (req, res, next) => {
   }
 };
 
+const getPublicAssets = async (req, res, next) => {
+  try {
+    const assets = await PortfolioAsset.find({ category: "resume" })
+      .select("title category originalName secureUrl resourceType format createdAt")
+      .sort({ createdAt: -1 });
+    return res.status(200).json({ data: assets });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const getAssets = async (req, res, next) => {
   try {
     const assets = await PortfolioAsset.find().sort({ createdAt: -1 });
@@ -103,5 +114,6 @@ module.exports = {
   createAsset,
   deleteAsset,
   getAssets,
+  getPublicAssets,
   getUploadSignature
 };

@@ -60,6 +60,18 @@
   line-height: 1.8;
 }
 
+.intentNote {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  margin: 10px 0 0;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(216, 255, 87, 0.32);
+  color: #4e6300;
+  font-weight: 700;
+}
+
 .contactPoints {
   display: grid;
   gap: 10px;

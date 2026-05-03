@@ -205,6 +205,24 @@
   font-weight: 800;
 }
 
+.assetActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.assetActions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(8, 20, 33, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+}
+
 .assetStatus,
 .emptyAssets {
   margin-bottom: 16px;

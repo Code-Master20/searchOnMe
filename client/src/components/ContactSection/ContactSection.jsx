@@ -45,6 +45,7 @@ function ContactSection() {
   const [status, setStatus] = useState({ type: "", text: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState({ type: "", text: "" });
+  const interviewIntent = searchParams.get("intent") === "interview";
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -98,6 +99,23 @@ function ContactSection() {
 
     return () => window.clearTimeout(timeoutId);
   }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (!interviewIntent) {
+      return;
+    }
+
+    setForm((current) => {
+      if (current.message.trim()) {
+        return current;
+      }
+
+      return {
+        ...current,
+        message: "Hi Sahidur, I would like to invite you for an interview."
+      };
+    });
+  }, [interviewIntent]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -158,6 +176,11 @@ function ContactSection() {
           Use the form to reach Sahidur Miah. Your message will only be delivered after email
           verification, which keeps communication clean and secure.
         </p>
+        {interviewIntent ? (
+          <p className={styles.intentNote}>
+            You&apos;re one step away from sending an interview invitation.
+          </p>
+        ) : null}
         <div className={styles.contactPoints}>
           <a href="mailto:sahidurmiah201920@gmail.com">sahidurmiah201920@gmail.com</a>
           <span>searchOnMe / Sahidur Miah</span>

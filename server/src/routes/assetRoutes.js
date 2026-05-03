@@ -1,8 +1,8 @@
 const express = require("express");
-const { getAssets } = require("../controllers/assetController");
+const { getPublicAssets } = require("../controllers/assetController");
 
 const router = express.Router();
 
-router.get("/", getAssets);
+router.get("/", getPublicAssets);
 
 module.exports = router;
